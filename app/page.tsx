@@ -5,6 +5,7 @@ export default function Home() {
 		<div className="flex items-left mx-auto h-screen max-w-screen-md sm:pt-10 sm:text-left px-5 md:max-w-2">
 			<title>Shekhar Jha </title>
 			<div className="md:flex flex-col py-2 px-8">
+				<Image src="/pfp.png" width={80} height={80} alt="Shekhar Jha" />
 				<div>
 					<span className="font-medium text-base">Shekhar Jha</span>
 				</div>
