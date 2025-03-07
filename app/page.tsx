@@ -16,19 +16,19 @@ export default function Home() {
 						</span>
 						<a
 							href="https://peakenergy.com"
-							className="font-normal text-[11px] underline underline-offset-4 decoration-1 decoration-gray-300 hover:text-blue-400 hover:decoration-blue-400"
+							className="font-normal text-xs underline underline-offset-4 decoration-1 decoration-gray-300 hover:text-blue-400 hover:decoration-blue-400"
 						>
 							Peak Energy,
 						</a>
 						<a
 							href="https://getminima.com"
-							className="font-normal text-[11px] underline underline-offset-4 decoration-1 decoration-gray-300 hover:text-blue-400 hover:decoration-blue-400"
+							className="font-normal text-xs underline underline-offset-4 decoration-1 decoration-gray-300 hover:text-blue-400 hover:decoration-blue-400"
 						>
 							Minima
 						</a>
 					</div>
 
-					<div className="mt-2 text-[11px]">
+					<div className="mt-2 text-xs">
 						<span className="text-gray-500 font-normal">My software </span>
 						<a
 							href="https://www.joelonsoftware.com/2009/09/23/the-duct-tape-programmer/"
@@ -38,30 +38,28 @@ export default function Home() {
 						</a>
 					</div>
 					<div className="flex flex-col gap-1">
-						<p className="mt-4 mb-2 text-[11px]">
-							You can reach me at my email -{' '}
+						<p className="mt-4 mb-2 text-xs text-gray-500">
+							Reach me at -{' '}
 							<a
 								href="mailto:sj@shekharjha.com"
-								className="underline underline-offset-4 decoration-gray-300 hover:text-blue-400 hover:decoration-blue-400"
+								className="underline font-medium underline-offset-4 decoration-gray-300 text-slate-700 hover:text-blue-400 hover:decoration-blue-400"
 							>
 								sj [at] shekharjha.com
 							</a>
 						</p>
-						<p className="flex flex-row gap-2 pb-2 text-[11px]">
-							<span className="text-gray-500 mr-1">
-								You can also find me at
-							</span>
+						<p className="flex flex-row items-center gap-2 pb-2 text-xs">
+							<span className="text-gray-500">Socials -</span>
 							<a
 								href="https://github.com/jhashekhar"
-								className="text-blue-400 underline-offset-2 decoration-gray-300 hover:underline hover:text-blue-400 hover:decoration-blue-400"
+								className="text-blue-400 underline underline-offset-2 decoration-gray-300 hover:underline hover:text-blue-400 hover:decoration-blue-400"
 							>
-								GitHub - jhashekhar
+								Github
 							</a>
 							<a
-								href="https://x.com/thesjha"
-								className="px-1 text-blue-400 underline-offset-2 decoration-gray-300 hover:underline hover:text-blue-400 hover:decoration-blue-400"
+								href="https://in.linkedin.com/in/jshekhar"
+								className="text-blue-400 underline underline-offset-2 decoration-gray-300 hover:underline hover:text-blue-400 hover:decoration-blue-400"
 							>
-								Twitter/X - @thesjha
+								LinkedIn
 							</a>
 						</p>
 					</div>
