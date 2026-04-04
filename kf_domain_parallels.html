@@ -1,0 +1,309 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:.75rem 0}
+.theme{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);margin-bottom:5px;overflow:hidden}
+.th{display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;user-select:none}
+.th:hover{background:var(--color-background-secondary)}
+.tn{font-size:10px;color:var(--color-text-tertiary);width:18px;flex-shrink:0}
+.tname{font-size:13px;font-weight:500;color:var(--color-text-primary);flex:1}
+.ttag{font-size:11px;color:var(--color-text-tertiary);flex-shrink:0}
+.chev{font-size:10px;color:var(--color-text-tertiary);transition:transform .15s;flex-shrink:0}
+.tb{display:none;padding:10px 14px 14px;border-top:0.5px solid var(--color-border-tertiary)}
+.tb.open{display:block}
+.anch{font-size:12px;color:var(--color-text-secondary);line-height:1.7;margin-bottom:10px;border-left:3px solid #1D9E75;padding-left:10px;border-radius:0}
+.anch b{color:var(--color-text-primary);font-weight:500}
+.pl{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--color-text-tertiary);margin-bottom:6px}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:7px;margin-bottom:8px}
+.dbox{border-radius:var(--border-radius-md);padding:9px 10px;border:0.5px solid}
+.dlbl{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.dr{font-size:11px;line-height:1.7;margin-bottom:1px}
+.dr b{font-weight:500}
+.dc{background:#FAECE7;border-color:#F0997B}.dc .dlbl{color:#712B13}.dc .dr{color:#993C1D}
+.da{background:#FAEEDA;border-color:#EF9F27}.da .dlbl{color:#633806}.da .dr{color:#854F0B}
+.db{background:#E6F1FB;border-color:#85B7EB}.db .dlbl{color:#0C447C}.db .dr{color:#185FA5}
+.dp{background:#EEEDFE;border-color:#AFA9EC}.dp .dlbl{color:#26215C}.dp .dr{color:#3C3489}
+.dk{background:#FBEAF0;border-color:#ED93B1}.dk .dlbl{color:#4B1528}.dk .dr{color:#72243E}
+.dg{background:#EAF3DE;border-color:#97C459}.dg .dlbl{color:#173404}.dg .dr{color:#27500A}
+@media(prefers-color-scheme:dark){
+  .dc{background:#4A1B0C;border-color:#993C1D}.dc .dlbl{color:#F0997B}.dc .dr{color:#F5C4B3}
+  .da{background:#412402;border-color:#854F0B}.da .dlbl{color:#FAC775}.da .dr{color:#EF9F27}
+  .db{background:#042C53;border-color:#185FA5}.db .dlbl{color:#85B7EB}.db .dr{color:#B5D4F4}
+  .dp{background:#26215C;border-color:#534AB7}.dp .dlbl{color:#CECBF6}.dp .dr{color:#AFA9EC}
+  .dk{background:#4B1528;border-color:#993556}.dk .dlbl{color:#F4C0D1}.dk .dr{color:#ED93B1}
+  .dg{background:#173404;border-color:#3B6D11}.dg .dlbl{color:#C0DD97}.dg .dr{color:#97C459}
+}
+.ins{font-size:12px;color:var(--color-text-secondary);line-height:1.6;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px;font-style:italic}
+.ins b{color:var(--color-text-primary);font-style:normal;font-weight:500}
+</style>
+<div class="w">
+
+<div class="theme" id="t1">
+<div class="th" onclick="tog(1)">
+  <div class="tn">01</div>
+  <div class="tname">State vs. observation</div>
+  <div class="ttag">You can't measure what you actually care about</div>
+  <div class="chev" id="ch1">▼</div>
+</div>
+<div class="tb" id="tb1">
+<div class="anch">In your battery work, you measure <b>terminal voltage V(t), current I(t), and temperature T(t)</b>. But what you actually care about — <b>SOH, capacity fade rate, internal resistance, lithium inventory</b> — none of these appear directly on any instrument. The Kalman filter exists entirely to close this gap: given a noisy, indirect signal, infer the hidden physical state that you actually want to track.</div>
+<div class="pl">The same gap in other domains</div>
+<div class="dgrid">
+  <div class="dbox dc">
+    <div class="dlbl">Missile tracking — Sentry Tower</div>
+    <div class="dr"><b>Observe:</b> radar range r, azimuth θ, elevation φ — polar, noisy blobs</div>
+    <div class="dr"><b>Want:</b> [x, y, z, vx, vy, vz] in Cartesian — clean position + velocity</div>
+    <div class="dr"><b>KF does:</b> inverts the noisy polar observation into a Cartesian state estimate with a covariance envelope</div>
+  </div>
+  <div class="dbox da">
+    <div class="dlbl">Nuclear reactor — PWR</div>
+    <div class="dr"><b>Observe:</b> thermocouple readings at coolant outlet, neutron detector counts at core periphery</div>
+    <div class="dr"><b>Want:</b> fuel centerline temperature, reactivity ρ, actual fission rate inside the rod</div>
+    <div class="dr"><b>KF does:</b> uses accessible coolant measurements to infer the inaccessible core state you care about for safety</div>
+  </div>
+  <div class="dbox dk">
+    <div class="dlbl">Satellite attitude — ADCS</div>
+    <div class="dr"><b>Observe:</b> star positions in sensor frame (star tracker), angular rate (gyroscope)</div>
+    <div class="dr"><b>Want:</b> full 3D attitude quaternion + gyro bias drift (hidden, accumulating)</div>
+    <div class="dr"><b>KF does:</b> fuses star tracker snapshots with gyro integration to estimate orientation + its accumulated error</div>
+  </div>
+</div>
+<div class="ins"><b>Universal pattern:</b> every domain has a gap between what instruments return and what engineers need. KF is the inversion operator for that gap. The observation model h(x) defines the gap; the filter inverts it optimally.</div>
+</div>
+</div>
+
+<div class="theme" id="t2">
+<div class="th" onclick="tog(2)">
+  <div class="tn">02</div>
+  <div class="tname">Process model — your physics IS the prediction step</div>
+  <div class="ttag">The F matrix is where domain expertise enters the filter</div>
+  <div class="chev" id="ch2">▼</div>
+</div>
+<div class="tb" id="tb2">
+<div class="anch">Your <b>degradation model</b> — how SOH and internal resistance evolve from cycle k to cycle k+1 — is the F matrix (or f(x) function in EKF). Every predict step, the filter asks: "given what I estimate now, where should this cell be next cycle?" That answer comes entirely from your electrochemistry knowledge. The KF has no opinions about battery degradation. You bring the physics. KF provides the optimal framework to fuse it with data.</div>
+<div class="pl">The same role of physics knowledge</div>
+<div class="dgrid">
+  <div class="dbox dc">
+    <div class="dlbl">Ballistic missile — trajectory</div>
+    <div class="dr"><b>Physics encoded:</b> Newton's laws + drag model. x(k+1) = x(k) + v·dt, v(k+1) = v(k) - (drag/m)·dt + g·dt</div>
+    <div class="dr"><b>When the model is right:</b> target is purely ballistic → filter tracks perfectly</div>
+    <div class="dr"><b>When it breaks:</b> assume ballistic, it's actually a glide vehicle with lift → filter diverges, target "disappears"</div>
+  </div>
+  <div class="dbox da">
+    <div class="dlbl">Nuclear reactor — kinetics</div>
+    <div class="dr"><b>Physics encoded:</b> point kinetics equations. dn/dt = [(ρ−β)/Λ]·n + Σλ_i·C_i — decades of nuclear engineering in one equation</div>
+    <div class="dr"><b>When the model is right:</b> steady-state operation → predictions accurate to millidegrees</div>
+    <div class="dr"><b>When it breaks:</b> use steady-state model during a control rod withdrawal → prediction wrong, filter misses the transient</div>
+  </div>
+  <div class="dbox db">
+    <div class="dlbl">UAV attitude — MEMS IMU</div>
+    <div class="dr"><b>Physics encoded:</b> rigid body rotation. q(k+1) = q(k) ⊗ exp(ω·dt/2) — quaternion kinematics from gyro angular rate</div>
+    <div class="dr"><b>When it works:</b> low vibration, smooth flight → attitude accurate to 0.1°</div>
+    <div class="dr"><b>When it breaks:</b> propeller vibration aliases into gyro readings → model prediction drifts, attitude estimate wanders</div>
+  </div>
+</div>
+<div class="ins"><b>Universal pattern:</b> the predict step is where you encode "I know how this system evolves." KF doesn't derive physics — it propagates whatever model you give it. A wrong F matrix is worse than no filter at all because the filter becomes confidently wrong.</div>
+</div>
+</div>
+
+<div class="theme" id="t3">
+<div class="th" onclick="tog(3)">
+  <div class="tn">03</div>
+  <div class="tname">Process noise Q — your model's confession</div>
+  <div class="ttag">How wrong are you about how your system evolves?</div>
+  <div class="chev" id="ch3">▼</div>
+</div>
+<div class="tb" id="tb3">
+<div class="anch">When you model capacity fade as a smooth curve, you're assuming you know how this cell will degrade. <b>Q is the parameter that admits you don't.</b> A field battery with irregular cycling, temperature swings, and fast charging deserves a large Q — your model is only approximately right. A lab cell on a tightly controlled protocol deserves a small Q. Getting Q wrong is the most common reason KF implementations fail: too small → filter ignores anomalies, confident and wrong; too large → filter is jittery, trusts every noise spike.</div>
+<div class="pl">The same tuning problem</div>
+<div class="dgrid">
+  <div class="dbox dc">
+    <div class="dlbl">Maneuvering aircraft — Singer model</div>
+    <div class="dr"><b>Q small:</b> commercial airliner cruising at 35,000ft. Model "constant velocity" is nearly right.</div>
+    <div class="dr"><b>Q large:</b> fighter jet in evasive maneuvers. You model constant velocity; it's pulling 9g. Classic Singer model sets Q = σ²_a — variance of unmodeled acceleration.</div>
+    <div class="dr"><b>Getting it wrong:</b> use small Q for a maneuvering target → filter lags badly in turns. Radar operator sees the jet, filter says it's still flying straight.</div>
+  </div>
+  <div class="dbox da">
+    <div class="dlbl">Nuclear — load following</div>
+    <div class="dr"><b>Q small:</b> steady baseload at 100% power for days. Your kinetics model is excellent.</div>
+    <div class="dr"><b>Q large:</b> operators ramping power to follow grid demand. Control rod movements, coolant flow changes. Your "steady-state" model doesn't know about the operator's actions.</div>
+    <div class="dr"><b>Getting it wrong:</b> use baseload Q during a transient → filter misses the reactivity change, temperature estimate lags the real core by seconds. That's a safety margin issue.</div>
+  </div>
+</div>
+<div class="ins"><b>Universal pattern:</b> Q is your honesty about model uncertainty. Every domain has stable-operation Q (small) and dynamic-operation Q (large). Adaptive Q estimation — automatically adjusting Q based on innovation residuals — is a real research area precisely because every domain needs it.</div>
+</div>
+</div>
+
+<div class="theme" id="t4">
+<div class="th" onclick="tog(4)">
+  <div class="tn">04</div>
+  <div class="tname">Measurement noise R — your sensor's datasheet</div>
+  <div class="ttag">How much should the filter trust what you just measured?</div>
+  <div class="chev" id="ch4">▼</div>
+</div>
+<div class="tb" id="tb4">
+<div class="anch">Your voltage probe has a noise floor — ±2mV from ADC quantization, ±0.5mV from thermal noise. Those numbers go directly into <b>R</b>. The KF never sees your datasheet, but R is exactly where that knowledge enters the filter. Set R too small → KF over-trusts every noisy voltage reading, state estimate jitters unphysically. Set R too large → KF ignores good data and relies too much on its own model. R is not a tuning knob — it's a measurement. It comes from calibration runs, not guesswork.</div>
+<div class="pl">The same R in other domains</div>
+<div class="dgrid">
+  <div class="dbox dc">
+    <div class="dlbl">Radar system — range and angle</div>
+    <div class="dr"><b>R for range:</b> ΔR = c/2B — determined by radar bandwidth. Wider bandwidth → smaller R. This is physics, not tuning.</div>
+    <div class="dr"><b>R for angle:</b> ΔΘ ≈ λ/D — determined by antenna aperture. Bigger antenna → smaller R.</div>
+    <div class="dr"><b>Getting it wrong:</b> use clear-sky R when tracking near the ground in clutter. Filter over-trusts the return, starts "tracking" ground reflections instead of the target.</div>
+  </div>
+  <div class="dbox db">
+    <div class="dlbl">GPS receiver — adaptive R</div>
+    <div class="dr"><b>R in open sky:</b> ±3m horizontal, ±5m vertical. Comes from satellite geometry (HDOP) and receiver specs.</div>
+    <div class="dr"><b>R in urban canyon:</b> ±20m (multipath reflections corrupt the signal). The same receiver, 10× worse R.</div>
+    <div class="dr"><b>Research area:</b> adaptive R — estimating R in real-time from carrier-to-noise ratio. The filter updates its own trust level as signal quality degrades.</div>
+  </div>
+  <div class="dbox dp">
+    <div class="dlbl">Submarine — depth gauge vs sonar</div>
+    <div class="dr"><b>R for depth gauge:</b> ±0.1m (pressure sensor — very tight, well-characterised, doesn't change)</div>
+    <div class="dr"><b>R for USBL acoustic:</b> ±2m in calm water, ±10m in thermocline layers (temperature gradients bend acoustic paths, inflating R)</div>
+    <div class="dr"><b>Key insight:</b> same physical measurement type (position), wildly different R depending on ocean conditions. Operators know the season and depth — that knowledge tunes R.</div>
+  </div>
+</div>
+<div class="ins"><b>Universal pattern:</b> R is physics-determined, not free to tune. Every domain has a first-principles way to derive R from sensor bandwidth, aperture, or noise floor. When R varies with operating conditions (fog, clutter, multipath), that variation needs to be modelled — not hidden inside a single fixed number.</div>
+</div>
+</div>
+
+<div class="theme" id="t5">
+<div class="th" onclick="tog(5)">
+  <div class="tn">05</div>
+  <div class="tname">Kalman gain K — automatic credibility weighting</div>
+  <div class="ttag">You never set K directly. It emerges from Q and R.</div>
+  <div class="chev" id="ch5">▼</div>
+</div>
+<div class="tb" id="tb5">
+<div class="anch">Early in your battery's life, you have no degradation history for this cell — your model is uncertain (P is large), so <b>K is large</b>, and the filter leans heavily on measurements. By cycle 200, the model has been calibrated to this cell's specific trajectory — P shrinks, K drops, the filter trusts its own prediction more. When an anomalous voltage reading arrives at cycle 300 — is it sensor noise or the onset of lithium plating? — the filter doesn't decide. K weighs the evidence automatically based on how uncertain P is relative to R. You never set K. It falls out of K = P·Hᵀ·(H·P·Hᵀ + R)⁻¹.</div>
+<div class="pl">The same automatic credibility logic</div>
+<div class="dgrid">
+  <div class="dbox dc">
+    <div class="dlbl">Drone LIDAR in degrading conditions</div>
+    <div class="dr"><b>Clear conditions:</b> R small (LIDAR accurate), K large → trust the range measurement, correct the position estimate aggressively.</div>
+    <div class="dr"><b>Heavy fog or dust:</b> R spikes (false returns, multi-path reflections), K drops automatically → rely on IMU prediction, barely correct from LIDAR.</div>
+    <div class="dr"><b>Key:</b> no operator mode-switching. The filter detects its own sensor degradation through R and adjusts K in real time. This is why KF is used in autonomous systems — it's self-regulating.</div>
+  </div>
+  <div class="dbox db">
+    <div class="dlbl">Aircraft — GPS reacquisition</div>
+    <div class="dr"><b>GPS available:</b> K is moderate — frequent corrections keep P bounded, filter stays calibrated.</div>
+    <div class="dr"><b>GPS denied (tunnel, jamming):</b> no updates arrive, P grows as INS drifts. K is computed but never applied — no measurement to apply it to.</div>
+    <div class="dr"><b>GPS returns:</b> P is large, so K spikes — the filter absorbs a large correction all at once to return to truth. That visible "jump" on the position display is K doing its job correctly.</div>
+  </div>
+</div>
+<div class="ins"><b>Universal pattern:</b> K = P·Hᵀ·(H·P·Hᵀ + R)⁻¹. This formula is identical in your battery filter, the Sentry Tower tracker, and an F-16's navigation computer. The numbers differ; the formula doesn't. K expresses: given my current model uncertainty (P) and sensor noise (R), how much should I weight this new reading? That question is universal.</div>
+</div>
+</div>
+
+<div class="theme" id="t6">
+<div class="th" onclick="tog(6)">
+  <div class="tn">06</div>
+  <div class="tname">EKF Jacobian — taking the derivative of your physics</div>
+  <div class="ttag">Nonlinear world → linearise around current estimate → standard KF</div>
+  <div class="chev" id="ch6">▼</div>
+</div>
+<div class="tb" id="tb6">
+<div class="anch">The relationship between your battery's hidden state [SOC, R_internal] and the observed terminal voltage is nonlinear — the OCV curve is an S-shape, not a line. The EKF handles this by <b>linearising around the current state estimate</b>: H = ∂V/∂[SOC, R_internal] — the partial derivatives of your electrochemical observation equation. If you can write the physics equation, you can take its derivative. That's the entire EKF extension over the standard KF. The Jacobian is just multivariable calculus applied to domain equations you already know.</div>
+<div class="pl">The same linearisation in other domains</div>
+<div class="dgrid">
+  <div class="dbox dc">
+    <div class="dlbl">Radar — Cartesian to polar</div>
+    <div class="dr"><b>Observation model:</b> h([x,y,z]) = [√(x²+y²+z²), atan2(y,x), atan2(z,√(x²+y²))]</div>
+    <div class="dr"><b>Jacobian H:</b> 3×3 partial derivative matrix of atan2 and sqrt functions — sophomore multivariable calculus</div>
+    <div class="dr"><b>Why it matters:</b> the conversion between Cartesian state space and polar observation space is nonlinear. Without EKF (without this Jacobian), you'd have to run KF in polar coordinates — numerically unstable near the poles.</div>
+  </div>
+  <div class="dbox da">
+    <div class="dlbl">Nuclear — power vs reactivity</div>
+    <div class="dr"><b>Observation model:</b> reactor power ∝ n (neutron density). n responds to reactivity as n_ss = n_0/(1 − ρ/β). This is nonlinear, especially near criticality (ρ → β).</div>
+    <div class="dr"><b>Jacobian H:</b> ∂n/∂ρ = n_0·β/(β−ρ)² — steep near criticality, shallow at low power</div>
+    <div class="dr"><b>Why it matters:</b> near criticality, small reactivity changes cause huge power changes. The Jacobian captures this asymmetry — the filter becomes more sensitive near dangerous operating points automatically.</div>
+  </div>
+  <div class="dbox dk">
+    <div class="dlbl">Spacecraft attitude — quaternion</div>
+    <div class="dr"><b>Observation model:</b> star position in sensor frame = R(q) × star_direction_inertial. R(q) is a rotation matrix, nonlinear in quaternion components.</div>
+    <div class="dr"><b>Why MEKF:</b> standard EKF on quaternions violates the unit-norm constraint. Multiplicative EKF parameterises the error as a small rotation, keeping the Jacobian well-conditioned.</div>
+    <div class="dr"><b>Key insight:</b> the Jacobian breaks down when you're on a manifold (rotations live on SO(3), not R⁴). This is where domain geometry forces algorithm adaptation.</div>
+  </div>
+</div>
+<div class="ins"><b>Universal pattern:</b> if you can write your observation equation h(x), you can compute ∂h/∂x at the current estimate. That Jacobian is the price of admission to EKF. A battery engineer knows the Butler-Volmer equation. A radar engineer knows the polar transformation. A nuclear engineer knows the kinetics equation. The Jacobian is just their calculus.</div>
+</div>
+</div>
+
+<div class="theme" id="t7">
+<div class="th" onclick="tog(7)">
+  <div class="tn">07</div>
+  <div class="tname">Multi-rate sensor fusion — fast + slow, one filter</div>
+  <div class="ttag">The predict/update split was designed for this</div>
+  <div class="chev" id="ch7">▼</div>
+</div>
+<div class="tb" id="tb7">
+<div class="anch">Think about two data streams in your battery work: <b>formation cycling data</b> — one capacity measurement per full cycle, hours apart — and <b>real-time terminal voltage</b> during discharge pulses, milliseconds apart. These are radically different rates. The EKF predict step runs at the fast rate (tracking instantaneous electrochemical state). The update step fires when a slow measurement arrives (end-of-cycle capacity). The predict/update decoupling in KF is architecturally designed exactly for this — and the same pattern appears in every serious instrumentation system.</div>
+<div class="pl">The canonical cases</div>
+<div class="dgrid">
+  <div class="dbox db">
+    <div class="dlbl">Aircraft — IMU + GPS (the canonical example)</div>
+    <div class="dr"><b>Fast sensor:</b> IMU at 200Hz — high-rate, accurate short-term, drifts ~1m/hour due to bias and random walk</div>
+    <div class="dr"><b>Slow sensor:</b> GPS at 1Hz — low-rate, bounded error ±3m, doesn't drift but jitters</div>
+    <div class="dr"><b>Architecture:</b> predict at 200Hz using IMU as process model. Update at 1Hz when GPS fires. Together: smooth, accurate, bounded navigation. Neither sensor alone is useful for control. This exact EKF runs in every smartphone, commercial aircraft, and military UAV on earth.</div>
+  </div>
+  <div class="dbox dp">
+    <div class="dlbl">Submarine — ring laser gyro + USBL</div>
+    <div class="dr"><b>Fast sensor:</b> ring laser gyroscope at 1kHz — extraordinarily accurate short-term (drift ~0.1nm/hour), completely self-contained, no external signals needed</div>
+    <div class="dr"><b>Slow sensor:</b> USBL acoustic positioning every ~10 seconds — noisy but provides an absolute fix. Requires pinging, which has acoustic signature implications.</div>
+    <div class="dr"><b>Architecture:</b> predict at 1kHz with gyro (silent, precise). Update at 0.1Hz with acoustic fix (noisy, bounded). The USBL corrects accumulated gyro drift before it exceeds the tactical error budget. The timing of acoustic pings is itself a tactical decision — less frequent = more stealthy.</div>
+  </div>
+  <div class="dbox dg">
+    <div class="dlbl">Power grid — PMU + SCADA</div>
+    <div class="dr"><b>Fast sensor:</b> Phasor Measurement Unit (PMU) at 30–120Hz — real-time voltage phasor, frequency, rate of change of frequency</div>
+    <div class="dr"><b>Slow sensor:</b> SCADA telemetry at 1 sample/4 seconds — power flows, switch states, transformer taps</div>
+    <div class="dr"><b>Architecture:</b> EKF for dynamic state estimation (rotor angles, frequency) uses PMU at fast rate. SCADA updates the static network topology when it arrives. Multi-rate fusion at grid scale — same mathematical structure as your battery EKF.</div>
+  </div>
+</div>
+<div class="ins"><b>Universal pattern:</b> fast + drifting sensor fused with slow + accurate reference. IMU + GPS. Gyro + star tracker. INS + acoustic. Formation data + real-time voltage. The topology is universal. Only the physics and rates change. Anduril platforms use this for every sensor combination on every vehicle.</div>
+</div>
+</div>
+
+<div class="theme" id="t8">
+<div class="th" onclick="tog(8)">
+  <div class="tn">08</div>
+  <div class="tname">Observability — what no filter can save you from</div>
+  <div class="ttag">If the state can't be inferred from your measurements, KF tuning cannot help</div>
+  <div class="chev" id="ch8">▼</div>
+</div>
+<div class="tb" id="tb8">
+<div class="anch">In your battery work: if you only measure OCV at rest, you can estimate SOC. But you <b>cannot simultaneously estimate SOC and internal resistance</b> from a single resting voltage reading — infinitely many [SOC, R_internal] pairs produce the same OCV. The system is unobservable. You need dynamic current — a discharge pulse — to make resistance "visible" through its effect on the voltage drop. This is an observability constraint. No amount of KF sophistication saves you. You need to <b>design the experiment to make states observable</b>.</div>
+<div class="pl">Observability constraints in other domains</div>
+<div class="dgrid">
+  <div class="dbox dc">
+    <div class="dlbl">Radar — range-only tracking</div>
+    <div class="dr"><b>Problem:</b> single radar, range measurements only. You know the target is 200km away. But it could be at any point on a sphere of radius 200km — position is not observable from range alone.</div>
+    <div class="dr"><b>Engineering fix:</b> add angle measurement to the same radar (monostatic), OR add a second radar at a known baseline (bistatic triangulation). Geometric diversity restores observability.</div>
+    <div class="dr"><b>Key insight:</b> radar arrays are positioned not just for coverage but for observability geometry. A radar can't be placed directly behind its own target. The baseline between sensors determines which states are observable.</div>
+  </div>
+  <div class="dbox da">
+    <div class="dlbl">Nuclear — coolant-only instrumentation</div>
+    <div class="dr"><b>Problem:</b> all sensors in the primary coolant loop. Coolant temperature is observable. Fuel pin centerline temperature (the safety-critical quantity) is NOT — it requires knowing the heat flux through the cladding.</div>
+    <div class="dr"><b>Engineering fix:</b> during commissioning, instrumented fuel assemblies with embedded thermocouples calibrate a heat transfer model mapping coolant → fuel temperature. That model becomes h(x) permanently.</div>
+    <div class="dr"><b>Key insight:</b> you pay the observability cost once (instrumented assembly, expensive) to build the model, then run cheap sensors forever. The observability problem is solved at design time, not at filter time.</div>
+  </div>
+  <div class="dbox dp">
+    <div class="dlbl">Submarine — depth observable, tilt not</div>
+    <div class="dr"><b>Problem:</b> depth gauge gives accurate depth. But depth alone doesn't tell you the boat's trim angle — same depth reading whether you're level or 5° bow-up.</div>
+    <div class="dr"><b>Engineering fix:</b> add two pressure sensors at bow and stern (not just one amidships). The difference between their readings gives trim. Spatial diversity of sensors restores observability of trim angle.</div>
+    <div class="dr"><b>Key insight:</b> placement of sensors matters for observability. A single sensor in the middle tells you less than two sensors at the extremes, even if both measure the same quantity.</div>
+  </div>
+</div>
+<div class="ins"><b>Universal pattern:</b> check observability before building the filter. Observability matrix O = [H; HF; HF²; ... HF^(n-1)]. If rank(O) &lt; state dimension, some states cannot be estimated from your measurements. Every domain has observability design constraints — radar baselines, sensor placement, experiment design. The filter is the last step. Observability is the first.</div>
+</div>
+</div>
+
+</div>
+<script>
+function tog(n){
+  var b=document.getElementById('tb'+n);
+  var c=document.getElementById('ch'+n);
+  b.classList.toggle('open');
+  c.style.transform=b.classList.contains('open')?'rotate(180deg)':'';
+}
+</script>

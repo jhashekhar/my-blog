@@ -1,0 +1,366 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:.75rem 0}
+.pipeline{margin-bottom:10px}
+.mission-bar{border:0.5px dashed var(--color-border-secondary);border-radius:var(--border-radius-md);padding:6px 14px;text-align:center;font-size:11px;color:var(--color-text-tertiary);margin-bottom:6px}
+.pipe-row{display:flex;align-items:stretch;gap:3px}
+.ps{flex:1;padding:8px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);min-width:0}
+.pn{font-size:12px;font-weight:500}
+.pp{font-size:10px;margin-top:2px;line-height:1.4}
+.pa{display:flex;align-items:center;font-size:11px;color:var(--color-text-tertiary);padding:0 1px;flex-shrink:0}
+.ps-strong{background:#E1F5EE;border-color:#5DCAA5}.ps-strong .pn{color:#085041}.ps-strong .pp{color:#1D9E75}
+.ps-partial{background:#FAEEDA;border-color:#EF9F27}.ps-partial .pn{color:#633806}.ps-partial .pp{color:#854F0B}
+.ps-none{background:var(--color-background-secondary);border-color:var(--color-border-tertiary)}.ps-none .pn{color:var(--color-text-secondary)}.ps-none .pp{color:var(--color-text-tertiary)}
+.rt-bar{border:0.5px solid #EF9F27;border-radius:var(--border-radius-md);padding:6px 14px;text-align:center;font-size:11px;margin-top:6px;background:#FAEEDA;color:#633806}
+@media(prefers-color-scheme:dark){
+  .ps-strong{background:#04342C;border-color:#1D9E75}.ps-strong .pn{color:#9FE1CB}.ps-strong .pp{color:#5DCAA5}
+  .ps-partial{background:#412402;border-color:#BA7517}.ps-partial .pn{color:#FAC775}.ps-partial .pp{color:#EF9F27}
+  .rt-bar{background:#412402;border-color:#BA7517;color:#FAC775}
+}
+.leg{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0}
+.li{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--color-text-secondary)}
+.ld{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dom{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);margin-bottom:5px;overflow:hidden}
+.d-strong{border-left:2px solid #1D9E75}.d-partial{border-left:2px solid #BA7517}
+.d-starting{border-left:2px solid #EF9F27}.d-next{border-left:2px solid #378ADD}
+.d-none{border-left:2px solid var(--color-border-tertiary)}
+.dh{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;user-select:none}
+.dh:hover{background:var(--color-background-secondary)}
+.dn{font-size:10px;color:var(--color-text-tertiary);width:18px;flex-shrink:0}
+.dname{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.dtag{font-size:11px;color:var(--color-text-tertiary);flex:1;margin-left:4px}
+.dbadge{font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px;flex-shrink:0}
+.d-strong .dbadge{background:#E1F5EE;color:#085041}
+.d-partial .dbadge{background:#FAEEDA;color:#633806}
+.d-starting .dbadge{background:#FAEEDA;color:#854F0B}
+.d-next .dbadge{background:#E6F1FB;color:#185FA5}
+.d-none .dbadge{background:#F1EFE8;color:#5F5E5A}
+@media(prefers-color-scheme:dark){
+  .d-strong .dbadge{background:#04342C;color:#9FE1CB}
+  .d-partial .dbadge,.d-starting .dbadge{background:#412402;color:#FAC775}
+  .d-next .dbadge{background:#042C53;color:#85B7EB}
+  .d-none .dbadge{background:#2C2C2A;color:#B4B2A9}
+}
+.chev{font-size:10px;color:var(--color-text-tertiary);transition:transform .15s;flex-shrink:0}
+.db{display:none;padding:10px 12px 14px;border-top:0.5px solid var(--color-border-tertiary)}
+.db.open{display:block}
+.sl{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--color-text-tertiary);margin:10px 0 3px}
+.sl:first-child{margin-top:0}
+.st{font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+.llist{font-size:12px;color:var(--color-text-secondary);padding-left:16px;line-height:1.9}
+.proj{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px;margin:4px 0;font-size:12px;color:var(--color-text-secondary);line-height:1.5}
+.pname{font-weight:500;color:var(--color-text-primary);display:block;margin-bottom:2px}
+.stag{font-size:10px;font-weight:500;padding:1px 6px;border-radius:8px;display:inline-block;margin-right:3px}
+.ta{background:#EEEDFE;color:#3C3489}.tb{background:#E1F5EE;color:#085041}.tc{background:#F1EFE8;color:#5F5E5A}
+@media(prefers-color-scheme:dark){.ta{background:#26215C;color:#CECBF6}.tb{background:#04342C;color:#9FE1CB}.tc{background:#2C2C2A;color:#D3D1C7}}
+.bridge{font-size:12px;color:var(--color-text-secondary);line-height:1.5;border-left:2px solid #1D9E75;padding-left:8px;margin:4px 0}
+.cta{font-size:11px;font-weight:500;padding:4px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);cursor:pointer;margin-top:8px;display:inline-block;color:var(--color-text-secondary);background:transparent}
+.cta:hover{background:var(--color-background-secondary)}
+.cap{border:1px solid #1D9E75;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:12px}
+@media(prefers-color-scheme:dark){.cap{border-color:#1D9E75}}
+.cap-t{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px}
+.seq{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;align-items:center}
+.sq{font-size:11px;padding:3px 9px;border-radius:10px;border:0.5px solid var(--color-border-secondary);color:var(--color-text-secondary)}
+.sq-now{background:#E6F1FB;border-color:#378ADD;color:#185FA5}
+@media(prefers-color-scheme:dark){.sq-now{background:#042C53;color:#85B7EB}}
+.sq-arr{font-size:11px;color:var(--color-text-tertiary)}
+</style>
+
+<div class="wrap">
+
+<div class="pipeline">
+  <div class="mission-bar">Mission &amp; Autonomy — behavior trees, multi-agent coordination, human-machine teaming (Lattice is this layer)</div>
+  <div class="pipe-row">
+    <div class="ps ps-strong">
+      <div class="pn">Perception</div>
+      <div class="pp">CNN · SAR · OpenCV</div>
+    </div>
+    <div class="pa">→</div>
+    <div class="ps ps-partial">
+      <div class="pn">Estimation</div>
+      <div class="pp">LSTM ✓ · KF/EKF ○</div>
+    </div>
+    <div class="pa">→</div>
+    <div class="ps ps-none">
+      <div class="pn">Planning</div>
+      <div class="pp">A* · RRT · traj. opt.</div>
+    </div>
+    <div class="pa">→</div>
+    <div class="ps ps-none">
+      <div class="pn">Control</div>
+      <div class="pp">PID · LQR · MPC</div>
+    </div>
+  </div>
+  <div class="rt-bar">Real-time Systems (Rust) — the execution substrate: deterministic timing, no GC, lock-free, DDS</div>
+</div>
+
+<div class="leg">
+  <div class="li"><div class="ld" style="background:#1D9E75"></div>Your strength</div>
+  <div class="li"><div class="ld" style="background:#BA7517"></div>Partial / adjacent</div>
+  <div class="li"><div class="ld" style="background:#378ADD"></div>Priority next</div>
+  <div class="li"><div class="ld" style="background:#888780"></div>Not started</div>
+</div>
+
+<div class="dom d-partial" id="d1">
+  <div class="dh" onclick="tog(1)">
+    <div class="dn">01</div>
+    <div class="dname">Math foundations</div>
+    <div class="dtag">Enabler — not a domain you build systems in, but the language everything is written in</div>
+    <div class="dbadge">Partial</div>
+    <div class="chev" id="ch1">▼</div>
+  </div>
+  <div class="db" id="db1">
+    <div class="sl">Gap from ML math to estimation math</div>
+    <div class="st">Your ML background gives you linear algebra and probability at the right level for backprop and loss surfaces. Estimation needs three extra things: <em>Gaussian conditioning</em> (the math behind the Kalman update), <em>Jacobians</em> (how you linearize a nonlinear function — the EKF's core operation), and <em>state-space notation</em> (how physical systems are written as x(k+1) = Ax(k) + Bu(k) + w(k)).</div>
+    <div class="sl">Specific things to learn</div>
+    <div class="llist">
+      <li>Conditional Gaussian distributions: given joint Gaussian p(x,y), what is p(x|y)? This derivation IS the Kalman update step.</li>
+      <li>Jacobian matrices: how to linearize f(x) around an operating point x₀. If you can compute ∂f/∂x, you can implement any EKF.</li>
+      <li>State-space representation: x = Ax + Bu + w, y = Cx + v. Learn to read this fluently.</li>
+      <li>ODE integration: Euler and RK4. Needed to simulate physical systems for testing your estimators and controllers.</li>
+    </div>
+    <div class="sl">Do this first</div>
+    <div class="proj">
+      <span class="pname">Derive the Kalman filter from scratch</span>
+      Pen and paper. Start from Bayesian conditioning of two Gaussians, derive the predict and update equations. One afternoon. Makes everything else obvious. Use Labbe's "Kalman Filters in Python" Ch.1 as the guide.
+    </div>
+    <div class="sl">Resources</div>
+    <div class="st">Labbe's "Kalman and Bayesian Filters in Python" (free, filterpyrepository) · Barfoot "State Estimation for Robotics" Appendix A (free PDF) · 3Blue1Brown eigenvectors video if you're rusty</div>
+  </div>
+</div>
+
+<div class="dom d-next" id="d2">
+  <div class="dh" onclick="tog(2)">
+    <div class="dn">02</div>
+    <div class="dname">Probabilistic estimation</div>
+    <div class="dtag">The mathematical heart of the stack — every autonomous system is an estimation problem</div>
+    <div class="dbadge">Priority next</div>
+    <div class="chev" id="ch2">▼</div>
+  </div>
+  <div class="db" id="db2">
+    <div class="sl">What it is</div>
+    <div class="st">Tracking the state of a system over time given noisy, incomplete observations. The hidden state could be a drone's position, a submarine's heading, an aircraft's trajectory, or a battery's internal resistance. The math is the same. This is the one domain where getting deeply good has compounding returns across every other domain in the stack.</div>
+    <div class="sl">Your bridge</div>
+    <div class="bridge">Your LSTM-Transformer RUL model IS an estimation system — you're estimating a hidden degradation state from noisy cycle observations. You did it with a learned model. The Kalman filter family does it with an analytical model. Understanding both gives you something most ML engineers and most control engineers don't have: the ability to choose the right tool. When data is abundant and dynamics are complex → learned estimation. When data is sparse and physics is known → analytical estimation. Often you combine them (deep Kalman filter, learned process model inside an EKF framework).</div>
+    <div class="sl">The progression</div>
+    <div class="llist">
+      <li><strong>Kalman Filter (KF)</strong> — linear systems, Gaussian noise. Simplest case. Radar tracking, GPS smoothing. Start here.</li>
+      <li><strong>Extended Kalman Filter (EKF)</strong> — nonlinear systems, linearized via Jacobians. UAV position estimation, robot odometry. The industry workhorse.</li>
+      <li><strong>Unscented Kalman Filter (UKF)</strong> — nonlinear, sigma-point approximation. More accurate than EKF for highly nonlinear systems, no Jacobians required.</li>
+      <li><strong>Particle Filter</strong> — non-Gaussian, non-linear, general. Used when dynamics are highly nonlinear or multi-modal (e.g., tracking a target that could be at one of several locations).</li>
+      <li><strong>Factor Graphs</strong> — modern formulation, used in SLAM and multi-sensor fusion. GTSAM/g2o. Worth understanding conceptually even if not implementing immediately.</li>
+    </div>
+    <div class="sl">Build — in this order</div>
+    <div class="proj">
+      <span class="pname"><span class="tc stag">Rust</span> 1D Kalman filter</span>
+      Estimate position from noisy GPS measurements. No matrices, just scalars. Focus on the predict/update loop and watching the uncertainty collapse as observations arrive. 1–2 days.
+    </div>
+    <div class="proj">
+      <span class="pname"><span class="tc stag">Rust</span> EKF for 2D vehicle tracking</span>
+      State vector [x, y, heading, speed]. Nonlinear motion model (constant velocity, turning). Noisy [x,y] observations. Implement the Jacobian manually. This is the canonical EKF example — exists in every robotics course. 1 week.
+    </div>
+    <div class="proj">
+      <span class="pname"><span class="tb stag">Bridge</span> Battery SOH with EKF</span>
+      Replace your LSTM with an analytical degradation model inside an EKF. State = [capacity_fade_rate, internal_resistance]. Observation = voltage/capacity measurements. This is the key bridge project: same domain you know deeply, different estimation framework. You'll viscerally understand what KF can't do (it assumes linear-ish dynamics) and what your LSTM does better (captures complex nonlinear path-dependence). A proper comparison of both approaches on your data is a paper-worthy result.
+    </div>
+    <div class="proj">
+      <span class="pname"><span class="tc stag">Rust</span> IMU + GPS fusion with EKF</span>
+      The canonical aerospace example. Fuse accelerometer/gyroscope (high frequency, drifting) with GPS (low frequency, accurate). This exact code runs in every UAV, every autonomous vehicle, every spacecraft. 1–2 weeks.
+    </div>
+    <div class="sl">Resources</div>
+    <div class="st">Thrun, Burgard, Fox — "Probabilistic Robotics" Ch.3–4 (THE reference) · Labbe's free Jupyter book (interactive, excellent) · Barfoot "State Estimation for Robotics" (rigorous, Lie groups, the advanced path)</div>
+    <button class="cta" onclick="sendPrompt('Walk me through implementing a 1D Kalman filter in Rust — the predict/update loop, how to think about the noise matrices Q and R, and how to verify it works')">Start KF in Rust ↗</button>
+  </div>
+</div>
+
+<div class="dom d-strong" id="d3">
+  <div class="dh" onclick="tog(3)">
+    <div class="dn">03</div>
+    <div class="dname">Perception &amp; signal processing</div>
+    <div class="dtag">Your existing strength — targeted gaps to fill</div>
+    <div class="dbadge">Strong</div>
+    <div class="chev" id="ch3">▼</div>
+  </div>
+  <div class="db" id="db3">
+    <div class="sl">What you already have</div>
+    <div class="st">CNN-based computer vision, PyTorch, satellite imagery processing (SAR, hyperspectral), OpenCV. This is solid. Defense/space perception pipelines are the same stack — the sensors change, the algorithms are familiar.</div>
+    <div class="sl">Gaps to fill</div>
+    <div class="llist">
+      <li><strong>Radar signal processing</strong>: range-FFT (where is the target?), Doppler-FFT (how fast is it moving?), CFAR detection (finding targets in clutter). Anduril's Sentry Tower is radar-primary. Your SAR background is the right entry point — you've processed radar data, now learn the signal chain from the antenna back.</li>
+      <li><strong>IMU noise models</strong>: accelerometers have bias and random walk. Understanding these is required to build a proper IMU+GPS EKF. Allan variance plots, random walk vs. bias instability.</li>
+      <li><strong>Visual odometry / SLAM</strong>: bridge from your CV strength to estimation. Feature matching across frames → camera motion → 3D map. Used in every UAV and autonomous vehicle that operates without GPS.</li>
+    </div>
+    <div class="sl">Key bridging project</div>
+    <div class="proj">
+      <span class="pname"><span class="ta stag">CV→Estimation</span> Visual odometry from scratch</span>
+      Take a monocular camera sequence, extract features (ORB or SIFT), match across frames, recover the essential matrix, decompose to R and t. Estimate camera trajectory. This directly bridges your computer vision skills to the estimation domain and to SLAM. Once you do this, you understand why people fuse cameras with IMUs (visual-inertial odometry — the gold standard for indoor autonomy).
+    </div>
+    <div class="sl">Resources</div>
+    <div class="st">Hartley &amp; Zisserman "Multiple View Geometry" (the bible) · "Introduction to Radar Systems" by Skolnik Chs.1–3 · TUM Visual Odometry dataset (free benchmark)</div>
+  </div>
+</div>
+
+<div class="dom d-starting" id="d4">
+  <div class="dh" onclick="tog(4)">
+    <div class="dn">04</div>
+    <div class="dname">Real-time systems</div>
+    <div class="dtag">Cross-cutting substrate — everything in the stack runs on this</div>
+    <div class="dbadge">Starting</div>
+    <div class="chev" id="ch4">▼</div>
+  </div>
+  <div class="db" id="db4">
+    <div class="sl">What real-time means</div>
+    <div class="st">Deterministic, not fast. Your code must complete in a guaranteed time budget — always, not on average. A 50ms jitter spike in a UAV attitude controller during a maneuver is a crash, not a latency metric. This rules out garbage collection, unbounded heap allocation, and mutexes that can block indefinitely. Rust was built for exactly this reason.</div>
+    <div class="sl">The mental model shift</div>
+    <div class="st">In application code, you ask "does this work?" In real-time code, you ask "does this work AND finish in ≤N microseconds on worst-case input?" Every data structure, every allocation, every lock must be analyzed for its worst-case behavior, not average behavior.</div>
+    <div class="sl">Things to learn</div>
+    <div class="llist">
+      <li><strong>Rust <code>no_std</code></strong>: what the standard library actually provides and what you lose without it (heap allocation, threads, file I/O). Writing <code>no_std</code> Rust is writing for embedded/RTOS targets.</li>
+      <li><strong>Allocation discipline</strong>: why <code>Vec::push</code> on a hot path is dangerous (hidden realloc). Stack allocation, fixed-size arrays, pre-allocated buffers. The <code>heapless</code> crate.</li>
+      <li><strong>Lock-free data structures</strong>: atomic operations, memory ordering (Acquire/Release/SeqCst), MPSC queues without mutexes. Needed for sensor data flowing between threads.</li>
+      <li><strong>RTOS concepts</strong>: task scheduling (rate monotonic scheduling), priority inversion, deadline guarantees. Even if you never write RTOS code directly, understanding this lets you reason about why embedded firmware is structured the way it is.</li>
+      <li><strong>DDS (Data Distribution Service)</strong>: the publish-subscribe standard that Anduril's Lattice, ROS2, and the F-35 all use. Topics, QoS policies (reliability, deadline, lifespan). Look at Zenoh — a Rust-native DDS-style system.</li>
+    </div>
+    <div class="sl">Build</div>
+    <div class="proj">
+      <span class="pname"><span class="tc stag">Rust</span> Lock-free ring buffer for sensor data</span>
+      Implement a fixed-capacity ring buffer using atomics and no mutexes. Producer thread writes sensor readings, consumer thread reads them. Benchmark it against Mutex&lt;VecDeque&gt;. Already in your roadmap — this is the right project.
+    </div>
+    <div class="proj">
+      <span class="pname"><span class="tc stag">Rust</span> Minimal pub/sub message bus</span>
+      Topics as typed channels, subscribers register interest, publisher sends to all subscribers. No heap allocation on the message path. This is DDS in miniature — you'll understand why Anduril uses it to connect their sensor nodes to their mission system. Eventually look at Zenoh for the real thing.
+    </div>
+    <div class="sl">Resources</div>
+    <div class="st">Rust embedded book (docs.rust-embedded.org) · "Real-Time Systems" by Liu Ch.1–3 · Zenoh documentation (zenoh.io) · heapless crate documentation</div>
+    <button class="cta" onclick="sendPrompt('Explain DDS — Data Distribution Service — what problem it solves, how QoS policies work, and why Anduril and ROS2 both use it for autonomous systems')">What is DDS? ↗</button>
+  </div>
+</div>
+
+<div class="dom d-none" id="d5">
+  <div class="dh" onclick="tog(5)">
+    <div class="dn">05</div>
+    <div class="dname">Control theory</div>
+    <div class="dtag">Given state estimate, compute inputs to achieve desired behavior</div>
+    <div class="dbadge">Not started</div>
+    <div class="chev" id="ch5">▼</div>
+  </div>
+  <div class="db" id="db5">
+    <div class="sl">What it is</div>
+    <div class="st">Estimation answers "where am I?" Planning answers "where should I go?" Control answers "what do I do with my actuators right now to get there?" These are distinct problems. PID is the simplest controller. LQR is optimal for linear systems. MPC runs an optimization loop in real time and handles constraints (don't exceed max thrust, stay within geofence).</div>
+    <div class="sl">Your bridge</div>
+    <div class="bridge">You understand optimization from ML training. LQR is literally solving a minimization problem: find control inputs u that minimize a cost function J = Σ(xᵀQx + uᵀRu). MPC is running gradient descent on a prediction horizon in real time. The intuition transfers — the math notation is different but the concept is the same.</div>
+    <div class="sl">The progression</div>
+    <div class="llist">
+      <li><strong>PID controller</strong>: proportional + integral + derivative. The building block. Found in every motor driver, every temperature regulator, every quad rotor inner loop. Learn Ziegler-Nichols tuning. Implement one in Rust.</li>
+      <li><strong>Stability analysis</strong>: eigenvalues of the closed-loop system matrix. A controller is stable if all eigenvalues have negative real parts. This lets you reason about whether your controller will converge or oscillate.</li>
+      <li><strong>Linear Quadratic Regulator (LQR)</strong>: optimal control for linear systems. Solve the algebraic Riccati equation, get the optimal feedback gain matrix K. Used in UAV attitude control, spacecraft pointing, robotic arm joints.</li>
+      <li><strong>Model Predictive Control (MPC)</strong>: simulate N steps into the future, find the input sequence that minimizes cost over that horizon, apply first input, repeat. Handles constraints. Used in autonomous vehicles and advanced UAV trajectory following.</li>
+    </div>
+    <div class="sl">Build</div>
+    <div class="proj">
+      <span class="pname"><span class="tc stag">Rust</span> PID for a simulated 1D system</span>
+      Mass-spring-damper or simple DC motor. Tune it. Watch it overshoot, undershoot, oscillate. Tune the gains manually and then with Ziegler-Nichols. Building this in Rust with a timestep loop is also an exercise in deterministic simulation — important for testing real-time systems.
+    </div>
+    <div class="proj">
+      <span class="pname"><span class="tc stag">Rust</span> LQR for an inverted pendulum</span>
+      The canonical control theory demo. Balance a pole on a cart. State = [cart position, cart velocity, pole angle, pole angular velocity]. Solve the Riccati equation (can compute offline, hardcode gains for the simulation). Gives deep intuition for how LQR trades off state error vs. control effort via the Q and R matrices.
+    </div>
+    <div class="sl">Resources</div>
+    <div class="st">Brian Douglas YouTube channel (best control theory explainers on the internet) · "Control System Design" by Goodwin et al. Chs.1–6 · Steve Brunton's "Data-Driven Control" lectures (connects control to ML, highly relevant for you)</div>
+    <button class="cta" onclick="sendPrompt('Explain LQR intuitively — what the Q and R matrices mean, why it\'s called optimal, and what its limitations are compared to MPC')">LQR intuition ↗</button>
+  </div>
+</div>
+
+<div class="dom d-none" id="d6">
+  <div class="dh" onclick="tog(6)">
+    <div class="dn">06</div>
+    <div class="dname">Planning &amp; decision</div>
+    <div class="dtag">Given state and goal, find a feasible path or action sequence</div>
+    <div class="dbadge">Not started</div>
+    <div class="chev" id="ch6">▼</div>
+  </div>
+  <div class="db" id="db6">
+    <div class="sl">What it is</div>
+    <div class="st">Two distinct sub-problems: <em>path planning</em> (find a geometric path from A to B avoiding obstacles) and <em>trajectory optimization</em> (find a dynamically-feasible, minimum-cost trajectory — respecting the system's physics). Behavior trees sit above both: they define the hierarchical logic for when to plan, when to execute, when to abort.</div>
+    <div class="sl">Your bridge</div>
+    <div class="bridge">Graph search (A*) is just algorithms, which you know. The harder part is trajectory optimization, which is constrained optimization — and you have intuition for that from ML. The new concept is the <em>dynamics constraint</em>: the path has to be followable given your system's physics (max acceleration, turn radius, etc.).</div>
+    <div class="sl">The progression</div>
+    <div class="llist">
+      <li><strong>A* and D* Lite</strong>: graph search on discrete/grid worlds. Foundation. D* Lite replans efficiently when the map changes.</li>
+      <li><strong>RRT / RRT*</strong>: sampling-based planning for continuous state spaces. Grows a random tree, finds path. RRT* converges to optimal path given enough time. Standard for robotic arm planning and UAV obstacle avoidance.</li>
+      <li><strong>Trajectory optimization</strong>: CHOMP (gradient descent on path), iLQR (iterative LQR, produces locally optimal trajectories). This is where planning meets control. Every trajectory-following drone uses something like this.</li>
+      <li><strong>Behavior trees</strong>: hierarchical task decomposition. Nodes: Sequence (do A then B), Selector (try A, if fail try B), Condition (is X true?), Action (do Y). The standard architecture for autonomous system behavior in defense and robotics — Anduril, Boston Dynamics, and ROS2 all use them.</li>
+    </div>
+    <div class="sl">Build</div>
+    <div class="proj">
+      <span class="pname"><span class="tc stag">Rust</span> RRT for 2D obstacle avoidance</span>
+      Random 2D environment with circular obstacles. Grow a tree from start, find path to goal. Visualize the tree growing. Extend to RRT* and watch paths improve. 3–5 days.
+    </div>
+    <div class="proj">
+      <span class="pname"><span class="tc stag">Rust</span> Behavior tree executor</span>
+      Implement the core node types (Sequence, Selector, Action, Condition, Parallel). Tick-based execution. This is the architecture that coordinates the full autonomy loop — "if obstacle detected: stop → replan → resume, else: track waypoint." Your AI agents background actually maps here — both are hierarchical task orchestration.
+    </div>
+    <div class="sl">Resources</div>
+    <div class="st">LaValle "Planning Algorithms" (free at planning.cs.uiuc.edu, the reference textbook) · "Behavior Trees in Robotics and AI" by Colledanchise &amp; Ögren · BehaviorTree.CPP library (C++ but excellent architecture reference)</div>
+  </div>
+</div>
+
+<div class="dom d-partial" id="d7">
+  <div class="dh" onclick="tog(7)">
+    <div class="dn">07</div>
+    <div class="dname">Mission &amp; autonomy</div>
+    <div class="dtag">Coordinating multiple capabilities toward mission objectives — Lattice is this layer</div>
+    <div class="dbadge">Adjacent</div>
+    <div class="chev" id="ch7">▼</div>
+  </div>
+  <div class="db" id="db7">
+    <div class="sl">What it is</div>
+    <div class="st">The highest-level layer: multi-agent coordination, fault-tolerant mission execution, human-machine teaming, distributed state sharing across vehicles. Anduril's Lattice platform is an implementation of this layer — it connects drones, ground vehicles, sensors, and human operators into a shared operational picture and coordinates their behavior toward mission goals.</div>
+    <div class="sl">Your bridge</div>
+    <div class="bridge">Your AI agents work (the Teams bot, the Voltaiq replacement, multi-tool orchestration) maps directly here. Both are hierarchical task orchestration with tool/capability routing. The difference is latency constraints (mission systems run in seconds, not minutes) and the nature of the tools (physical effectors, not API calls). Your battery intelligence platform's architecture — intent classification → tool routing → result synthesis — is conceptually the same as a mission planner routing to sensing, navigation, and communication capabilities.</div>
+    <div class="sl">Things to understand</div>
+    <div class="llist">
+      <li><strong>Multi-agent task allocation</strong>: N vehicles, M targets, assign optimally. Hungarian algorithm for simple cases. Auction algorithms for decentralized settings. Coalition formation for complex tasks.</li>
+      <li><strong>Consensus and distributed state</strong>: how do 10 drones agree on a shared picture of the world when they're communicating over a lossy radio link? Raft/PBFT concepts. Relevant to Lattice's tactical data link architecture.</li>
+      <li><strong>Human-machine teaming</strong>: mixed-initiative systems where human and autonomous agents share control. Supervisory control theory. When does the system ask for human authorization vs. act autonomously? This is Anduril's central design challenge.</li>
+      <li><strong>ROS2</strong>: even though defense systems don't use ROS2 directly, it implements the full autonomy stack (DDS, behavior trees, sensor drivers, visualization) and is the best pedagogical environment for understanding how all the layers connect.</li>
+    </div>
+    <div class="sl">Build</div>
+    <div class="proj">
+      <span class="pname"><span class="ta stag">Agents</span> Multi-agent task allocator</span>
+      N simulated UAVs, M targets in a 2D map. Implement the Hungarian algorithm for global optimal allocation, then implement an auction protocol for decentralized allocation. Compare. This is the core of any multi-vehicle coordination system.
+    </div>
+    <div class="proj">
+      <span class="pname"><span class="ta stag">Agents</span> Fault-tolerant mission planner</span>
+      A mission that replans when sensors fail or waypoints become unreachable. Uses behavior trees (domain 6) for the execution layer and EKF (domain 2) for localization. Connects the stack.
+    </div>
+    <div class="sl">Resources</div>
+    <div class="st">ROS2 documentation + Nav2 stack (the full autonomous navigation reference) · "Multiagent Systems" by Shoham &amp; Leyton-Brown · Anduril's public talks on Lattice architecture (YouTube)</div>
+  </div>
+</div>
+
+<div class="cap">
+  <div class="cap-t">Capstone: Autonomy Primitives Library in Rust</div>
+  <div class="st" style="margin-bottom:8px">Build a single Rust crate containing: EKF (domain 2) + lock-free sensor buffer (domain 4) + A* planner (domain 6) + PID controller (domain 5) + behavior tree executor (domain 6). Write a 2D simulation that uses all of them: a robot that localizes with EKF, plans with A*, controls with PID, and sequences tasks with behavior trees. This is not novel research — it's a learning artifact that happens to demonstrate fluency across the full stack. It's the kind of portfolio piece that an Anduril or Shield AI engineer reads and immediately understands what you're capable of.</div>
+  <div class="st" style="font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Recommended sequence</div>
+  <div class="seq">
+    <span class="sq">Math gaps (2 wks)</span><span class="sq-arr">→</span>
+    <span class="sq sq-now">KF → EKF in Rust (4 wks)</span><span class="sq-arr">→</span>
+    <span class="sq">Battery SOH/EKF bridge (2 wks)</span><span class="sq-arr">→</span>
+    <span class="sq">PID + LQR (3 wks)</span><span class="sq-arr">→</span>
+    <span class="sq">A* + RRT (2 wks)</span><span class="sq-arr">→</span>
+    <span class="sq">Behavior trees (2 wks)</span><span class="sq-arr">→</span>
+    <span class="sq">Integration simulation (2 wks)</span>
+  </div>
+</div>
+
+</div>
+<script>
+function tog(n){
+  var b=document.getElementById('db'+n);
+  var c=document.getElementById('ch'+n);
+  b.classList.toggle('open');
+  c.style.transform=b.classList.contains('open')?'rotate(180deg)':'';
+}
+</script>

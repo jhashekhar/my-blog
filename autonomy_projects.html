@@ -1,0 +1,234 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:.75rem 0}
+.tleg{display:flex;gap:14px;margin-bottom:10px;flex-wrap:wrap}
+.tli{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--color-text-secondary)}
+.tlb{width:3px;height:14px;border-radius:2px;flex-shrink:0}
+.tlb-f{background:var(--color-border-secondary)}
+.tlb-b{background:#7F77DD}
+.tlb-c{background:#1D9E75}
+.fbrow{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px}
+.fb{font-size:11px;font-weight:500;padding:3px 10px;border-radius:10px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer}
+.fb:hover{background:var(--color-background-secondary)}
+.fb.on{color:#fff!important}
+.fb.on[data-f=all]{background:#5F5E5A;border-color:#5F5E5A}
+.fb.on[data-f=foundation]{background:#888780;border-color:#888780}
+.fb.on[data-f=bridge]{background:#7F77DD;border-color:#7F77DD}
+.fb.on[data-f=capstone]{background:#1D9E75;border-color:#1D9E75}
+.fb.on[data-f=d1]{background:#5F5E5A;border-color:#5F5E5A}
+.fb.on[data-f=d2]{background:#185FA5;border-color:#185FA5}
+.fb.on[data-f=d3]{background:#0F6E56;border-color:#0F6E56}
+.fb.on[data-f=d4]{background:#854F0B;border-color:#854F0B}
+.fb.on[data-f=d5]{background:#993C1D;border-color:#993C1D}
+.fb.on[data-f=d6]{background:#3C3489;border-color:#3C3489}
+.fb.on[data-f=d7]{background:#72243E;border-color:#72243E}
+.cnt{font-size:11px;color:var(--color-text-tertiary);margin:8px 0 10px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px}
+.card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;display:flex;flex-direction:column;gap:5px}
+.card[data-type=foundation]{border-left:2px solid var(--color-border-secondary)}
+.card[data-type=bridge]{border-left:2px solid #7F77DD}
+.card[data-type=capstone]{border-left:2px solid #1D9E75}
+.card.hidden{display:none!important}
+.ch{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.db{font-size:10px;font-weight:500;padding:1px 6px;border-radius:8px;border:0.5px solid}
+.d1{background:#F1EFE8;color:#5F5E5A;border-color:#D3D1C7}
+.d2{background:#E6F1FB;color:#185FA5;border-color:#B5D4F4}
+.d3{background:#E1F5EE;color:#0F6E56;border-color:#9FE1CB}
+.d4{background:#FAEEDA;color:#854F0B;border-color:#FAC775}
+.d5{background:#FAECE7;color:#993C1D;border-color:#F5C4B3}
+.d6{background:#EEEDFE;color:#3C3489;border-color:#CECBF6}
+.d7{background:#FBEAF0;color:#993556;border-color:#F4C0D1}
+@media(prefers-color-scheme:dark){
+  .d1{background:#2C2C2A;color:#D3D1C7;border-color:#5F5E5A}
+  .d2{background:#042C53;color:#85B7EB;border-color:#185FA5}
+  .d3{background:#04342C;color:#5DCAA5;border-color:#0F6E56}
+  .d4{background:#412402;color:#FAC775;border-color:#854F0B}
+  .d5{background:#4A1B0C;color:#F0997B;border-color:#993C1D}
+  .d6{background:#26215C;color:#CECBF6;border-color:#534AB7}
+  .d7{background:#4B1528;color:#ED93B1;border-color:#993556}
+}
+.tb{font-size:10px;font-weight:500;padding:1px 7px;border-radius:8px;margin-left:auto;flex-shrink:0}
+.tb-bridge{background:#EEEDFE;color:#3C3489}
+.tb-capstone{background:#E1F5EE;color:#085041}
+@media(prefers-color-scheme:dark){.tb-bridge{background:#26215C;color:#CECBF6}.tb-capstone{background:#04342C;color:#9FE1CB}}
+.ctitle{font-size:13px;font-weight:500;color:var(--color-text-primary);line-height:1.35}
+.cdesc{font-size:12px;color:var(--color-text-secondary);line-height:1.5;flex:1}
+.ccs{display:flex;flex-wrap:wrap;gap:4px}
+.cc{font-size:10px;padding:1px 6px;border-radius:8px;border:0.5px solid var(--color-border-secondary);color:var(--color-text-tertiary);font-family:var(--font-mono,monospace)}
+.cf{display:flex;align-items:center;gap:8px}
+.clang{font-size:11px;font-weight:500;color:var(--color-text-tertiary)}
+.ctime{font-size:11px;color:var(--color-text-tertiary);margin-left:auto}
+.can{font-size:11px;color:var(--color-text-tertiary);font-style:italic;border-top:0.5px solid var(--color-border-tertiary);padding-top:5px;margin-top:1px}
+</style>
+<div class="w">
+<div class="tleg">
+  <div class="tli"><div class="tlb tlb-f"></div>Foundation — single domain</div>
+  <div class="tli"><div class="tlb tlb-b"></div>Bridge — connects two domains</div>
+  <div class="tli"><div class="tlb tlb-c"></div>Capstone — integrates the stack</div>
+</div>
+<div class="fbrow">
+  <button class="fb on" data-f="all" onclick="sf(this)">All 25</button>
+  <button class="fb" data-f="foundation" onclick="sf(this)">Foundation 16</button>
+  <button class="fb" data-f="bridge" onclick="sf(this)">Bridge 5</button>
+  <button class="fb" data-f="capstone" onclick="sf(this)">Capstone 4</button>
+</div>
+<div class="fbrow">
+  <button class="fb" data-f="d1" onclick="sf(this)">D1 Math</button>
+  <button class="fb" data-f="d2" onclick="sf(this)">D2 Estimation</button>
+  <button class="fb" data-f="d3" onclick="sf(this)">D3 Perception</button>
+  <button class="fb" data-f="d4" onclick="sf(this)">D4 Real-time</button>
+  <button class="fb" data-f="d5" onclick="sf(this)">D5 Control</button>
+  <button class="fb" data-f="d6" onclick="sf(this)">D6 Planning</button>
+  <button class="fb" data-f="d7" onclick="sf(this)">D7 Mission</button>
+</div>
+<div class="cnt" id="cnt">Showing 25 of 25 projects</div>
+<div class="pgrid" id="pgrid"></div>
+</div>
+<script>
+const DL={d1:'Math',d2:'Estimation',d3:'Perception',d4:'Real-time',d5:'Control',d6:'Planning',d7:'Mission'};
+const P=[
+  {id:1,name:'KF derivation (pen and paper)',domains:['d1','d2'],type:'foundation',diff:1,time:'half day',lang:'Paper',
+   desc:'Derive the Kalman predict and update equations from conditional Gaussian distributions. The derivation makes the filter feel obvious rather than magical.',
+   concepts:['Gaussian conditioning','Bayes theorem','posterior distribution'],
+   anduril:'Foundation for every state estimator in Lattice'},
+  {id:2,name:'ODE integrators',domains:['d1','d4'],type:'foundation',diff:1,time:'1 day',lang:'Rust',
+   desc:'Implement Euler and RK4. Simulate a mass-spring-damper and compare accuracy vs step size. Makes physical simulation concrete before you build controllers.',
+   concepts:['Euler integration','RK4','numerical stability','simulation'],
+   anduril:'Physics simulation underpins all trajectory planning'},
+  {id:3,name:'1D Kalman filter',domains:['d2'],type:'foundation',diff:1,time:'1–2 days',lang:'Rust',
+   desc:'Track position from noisy scalar GPS. Build the predict/update loop and watch the posterior uncertainty collapse as observations arrive.',
+   concepts:['predict/update loop','Kalman gain','Q and R matrices'],
+   anduril:'GPS smoothing in every Anduril platform'},
+  {id:4,name:'EKF: 2D vehicle tracking',domains:['d2'],type:'foundation',diff:2,time:'3–5 days',lang:'Rust',
+   desc:'State = [x, y, heading, speed]. Nonlinear turn model. Noisy [x,y] observations. Implement the Jacobian by hand — this is where the EKF clicks.',
+   concepts:['Extended Kalman Filter','Jacobian linearization','nonlinear dynamics'],
+   anduril:'Target tracking in Sentry Tower radar'},
+  {id:5,name:'UKF: sigma-point filter',domains:['d2'],type:'foundation',diff:3,time:'3–5 days',lang:'Rust',
+   desc:'Re-implement project 4 using the Unscented Kalman Filter. No Jacobians. Compare accuracy on tight manoeuvres and see when UKF outperforms EKF.',
+   concepts:['unscented transform','sigma-point propagation','no-Jacobian nonlinear'],
+   anduril:'High-accuracy estimation for precision strike systems'},
+  {id:6,name:'Particle filter',domains:['d2'],type:'foundation',diff:3,time:'3–5 days',lang:'Rust',
+   desc:'Track a target with non-Gaussian, multi-modal uncertainty. Implement importance sampling and systematic resampling. Watch particle collapse when N is too low.',
+   concepts:['importance sampling','systematic resampling','particle degeneracy'],
+   anduril:'Ambiguous target tracking in cluttered environments'},
+  {id:7,name:'Lock-free ring buffer',domains:['d4'],type:'foundation',diff:2,time:'2–3 days',lang:'Rust',
+   desc:'Fixed-capacity SPSC buffer using atomics and no mutexes. Benchmark worst-case latency against Mutex<VecDeque>. The gap between them is the entire lesson.',
+   concepts:['atomic operations','Acquire/Release ordering','SPSC','lock-free'],
+   anduril:'Sensor data pipeline in every embedded Anduril node'},
+  {id:8,name:'DDS-style pub/sub bus',domains:['d4','d7'],type:'foundation',diff:3,time:'1 week',lang:'Rust',
+   desc:'Topics as typed channels. No heap allocation on the message path. Reliable vs best-effort QoS. DDS in miniature — understand why Lattice uses it.',
+   concepts:['pub/sub','zero-copy messaging','type-erasure','QoS policies'],
+   anduril:'Lattice node communication protocol (uses actual DDS under the hood)'},
+  {id:9,name:'Radar range-Doppler sim',domains:['d3'],type:'foundation',diff:2,time:'3–5 days',lang:'Python',
+   desc:'Simulate radar returns from a moving target. Apply range-FFT for distance, Doppler-FFT for velocity, CFAR for detection in noise.',
+   concepts:['range-FFT','Doppler shift','CFAR detection','matched filter'],
+   anduril:'Sentry Tower radar signal processing chain'},
+  {id:10,name:'PID controller',domains:['d5'],type:'foundation',diff:1,time:'2 days',lang:'Rust',
+   desc:'1D mass-spring-damper with tunable PID. Tune gains by hand: overshoot, oscillation, integral windup. Then apply Ziegler-Nichols automatically.',
+   concepts:['P/I/D gains','Ziegler-Nichols','steady-state error','integral windup'],
+   anduril:'Inner-loop attitude control in Fury drone'},
+  {id:11,name:'LQR: inverted pendulum',domains:['d5'],type:'foundation',diff:3,time:'1 week',lang:'Rust',
+   desc:'Balance a pole on a cart. Solve the algebraic Riccati equation offline. Tune Q and R and observe the fundamental tradeoff between state error and control effort.',
+   concepts:['LQR','Riccati equation','state feedback','Q/R tradeoff'],
+   anduril:'Drone attitude stabilisation, spacecraft pointing'},
+  {id:12,name:'MPC: constrained trajectory',domains:['d5','d6'],type:'foundation',diff:4,time:'1–2 weeks',lang:'Rust',
+   desc:'Predict N steps ahead, minimise cost over horizon, apply first input, repeat. Add max-thrust and velocity constraints. See graceful constraint handling vs PID.',
+   concepts:['receding horizon control','QP solver','constraints','MPC vs PID'],
+   anduril:'High-speed precision manoeuvring in autonomous vehicles'},
+  {id:13,name:'A* path planner',domains:['d6'],type:'foundation',diff:1,time:'2–3 days',lang:'Rust',
+   desc:'Shortest path on 2D grid with obstacles. Binary heap priority queue. Extend to D* Lite for dynamic replanning when obstacles appear mid-execution.',
+   concepts:['A* search','admissible heuristics','binary heap','D* Lite'],
+   anduril:'Waypoint planning in Lattice mission system'},
+  {id:14,name:'RRT obstacle avoidance',domains:['d6'],type:'foundation',diff:2,time:'3–5 days',lang:'Rust',
+   desc:'Grow a random tree in continuous 2D space, avoiding obstacles. Implement RRT* and watch paths converge toward optimal with more samples.',
+   concepts:['sampling-based planning','nearest-neighbour','RRT*','configuration space'],
+   anduril:'UAV path planning through complex 3D terrain'},
+  {id:15,name:'Behavior tree executor',domains:['d6','d7'],type:'foundation',diff:3,time:'1 week',lang:'Rust',
+   desc:'Implement Sequence, Selector, Parallel, Action, and Condition nodes. Tick-based execution. Test with a navigate-to-waypoint scenario with obstacle recovery.',
+   concepts:['BT node types','tick loop','composability','Success/Failure/Running'],
+   anduril:'Mission execution architecture inside Lattice'},
+  {id:16,name:'Multi-agent task allocator',domains:['d7'],type:'foundation',diff:3,time:'1 week',lang:'Rust',
+   desc:'N vehicles, M targets. Hungarian algorithm for centralised optimal assignment, then a contract-net auction for decentralised coordination. Compare quality and latency.',
+   concepts:['Hungarian algorithm','auction protocol','task assignment','decentralised coordination'],
+   anduril:'Multi-UAV swarm coordination in Lattice'},
+  {id:17,name:'Visual odometry',domains:['d3','d2'],type:'bridge',diff:3,time:'1–2 weeks',lang:'Python',
+   desc:'Feature detection → matching → essential matrix → decompose to R,t → accumulate camera trajectory. Your CV skills enter the estimation domain. The on-ramp to SLAM.',
+   concepts:['epipolar geometry','RANSAC','essential matrix','motion estimation'],
+   anduril:'Vision-based navigation in GPS-denied environments'},
+  {id:18,name:'Battery SOH with EKF',domains:['d2','d3'],type:'bridge',diff:3,time:'1–2 weeks',lang:'Rust',
+   desc:'Replace your LSTM with an analytical EKF degradation model. State = [capacity_fade_rate, resistance]. Compare vs your neural model on the same data. This is the key bridge project.',
+   concepts:['state-space degradation','analytical vs learned estimation','PHM validation'],
+   anduril:'PHM systems in nuclear, aerospace, and defence logistics'},
+  {id:19,name:'IMU + GPS fusion',domains:['d3','d2','d4'],type:'bridge',diff:3,time:'1–2 weeks',lang:'Rust',
+   desc:'Fuse 100Hz IMU (drifting) with 1Hz GPS (accurate) via EKF. IMU as process model, GPS as observation update. The navigation stack in every autonomous platform.',
+   concepts:['multi-rate sensor fusion','IMU noise model','bias estimation','integration drift'],
+   anduril:'Navigation core in Fury, Ghost 4, Roadrunner'},
+  {id:20,name:'EKF + PID closed loop',domains:['d2','d5'],type:'bridge',diff:3,time:'1–2 weeks',lang:'Rust',
+   desc:'Observer-controller pipeline: EKF estimates state from noisy observations, PID acts on the estimate. Demonstrates the separation principle and how estimation quality gates control.',
+   concepts:['observer-controller','separation principle','closed-loop estimation','noisy control'],
+   anduril:'Every closed-loop autonomous system ever built'},
+  {id:21,name:'BT + A* navigator',domains:['d6','d7'],type:'bridge',diff:3,time:'1–2 weeks',lang:'Rust',
+   desc:'A behavior tree that sequences: localise → plan path (A*) → follow waypoints (PID) → handle obstacles (replan). Your first complete sense-plan-act loop.',
+   concepts:['sense-plan-act','behavior orchestration','reactive replanning','task sequencing'],
+   anduril:'Autonomous navigation missions in Lattice'},
+  {id:22,name:'Autonomy primitives library',domains:['d2','d4','d5','d6'],type:'capstone',diff:4,time:'6–8 weeks',lang:'Rust',
+   desc:'One Rust crate: EKF + lock-free sensor buffer + PID + A* planner + behavior tree executor. Clean API, documented, tested, no_std compatible. The portfolio piece.',
+   concepts:['crate architecture','API design','no_std compatibility','integration testing'],
+   anduril:'Maps directly to every Anduril/Shield AI platform abstraction layer'},
+  {id:23,name:'2D autonomy simulator',domains:['d2','d5','d6','d7'],type:'capstone',diff:5,time:'8–10 weeks',lang:'Rust',
+   desc:'A robot that localises via EKF from range sensors, plans with RRT, controls with PID, and executes missions via behavior tree — one runnable binary, full autonomy loop.',
+   concepts:['full autonomy loop','sensor simulation','simulation harness','end-to-end testing'],
+   anduril:'Isomorphic to every mobile autonomous platform in Anduril\'s portfolio'},
+  {id:24,name:'Fault-tolerant mission planner',domains:['d6','d7'],type:'capstone',diff:4,time:'2–3 weeks',lang:'Rust',
+   desc:'Missions that survive sensor failure, waypoint denial, and comms loss. Graceful degradation: full autonomy → safe hover → return-to-home. BT-based fault recovery trees.',
+   concepts:['fault detection','graceful degradation','mission resilience','recovery behaviors'],
+   anduril:'Critical requirement for all Anduril platforms in contested environments'},
+  {id:25,name:'Deep Kalman filter',domains:['d2','d3'],type:'capstone',diff:5,time:'2–3 weeks',lang:'Python',
+   desc:'EKF where the process model is a small neural net trained on your battery data. Retains full KF uncertainty structure while gaining ML expressiveness. A genuine novel contribution.',
+   concepts:['learned process model','differentiable KF','hybrid estimation','uncertainty propagation'],
+   anduril:'Next-gen estimation for complex physical systems (nuclear, hypersonic, battery)'}
+];
+
+let cur='all';
+
+function sf(el){
+  const f=el.dataset.f;
+  cur=(cur===f&&f!=='all')?'all':f;
+  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));
+  document.querySelector('[data-f="'+cur+'"]').classList.add('on');
+  let n=0;
+  document.querySelectorAll('.card').forEach(c=>{
+    const ok=cur==='all'||(c.dataset.type===cur)||(c.dataset.domains&&c.dataset.domains.split(',').includes(cur));
+    c.classList.toggle('hidden',!ok);
+    if(ok)n++;
+  });
+  document.getElementById('cnt').textContent='Showing '+n+' of 25 projects';
+}
+
+function dots(d){
+  const col=d<=2?'#1D9E75':d<=3?'#BA7517':'#D85A30';
+  return Array.from({length:5},(_,i)=>'<span style="color:'+(i<d?col:'var(--color-border-secondary)')+';">'+(i<d?'●':'○')+'</span>').join('');
+}
+
+function render(){
+  document.getElementById('pgrid').innerHTML=P.map(p=>{
+    const dbs=p.domains.map(d=>`<span class="db ${d}">${DL[d]}</span>`).join('');
+    const tb=p.type!=='foundation'?`<span class="tb tb-${p.type}">${p.type}</span>`:'';
+    const ccs=p.concepts.map(c=>`<span class="cc">${c}</span>`).join('');
+    return `<div class="card" data-type="${p.type}" data-domains="${p.domains.join(',')}">
+  <div class="ch">${dbs}${tb}</div>
+  <div class="ctitle">${p.name}</div>
+  <div class="cdesc">${p.desc}</div>
+  <div class="ccs">${ccs}</div>
+  <div class="cf">
+    <span class="clang">${p.lang}</span>
+    <span style="font-size:10px;letter-spacing:1px">${dots(p.diff)}</span>
+    <span class="ctime">${p.time}</span>
+  </div>
+  <div class="can">${p.anduril}</div>
+</div>`;
+  }).join('');
+}
+render();
+</script>

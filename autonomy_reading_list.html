@@ -1,0 +1,455 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:.75rem 0}
+.tier-legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.tl{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--color-text-secondary)}
+.tldot{width:8px;height:8px;border-radius:50%}
+.dom{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);margin-bottom:5px;overflow:hidden}
+.d-partial{border-left:2px solid #BA7517}.d-strong{border-left:2px solid #1D9E75}
+.d-starting{border-left:2px solid #EF9F27}.d-next{border-left:2px solid #378ADD}
+.d-none{border-left:2px solid var(--color-border-tertiary)}
+.dh{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;user-select:none}
+.dh:hover{background:var(--color-background-secondary)}
+.dn{font-size:10px;color:var(--color-text-tertiary);width:18px;flex-shrink:0}
+.dname{font-size:13px;font-weight:500;color:var(--color-text-primary);flex:1}
+.dbadge{font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px;flex-shrink:0}
+.d-strong .dbadge{background:#E1F5EE;color:#085041}
+.d-partial .dbadge{background:#FAEEDA;color:#633806}
+.d-starting .dbadge,.d-next .dbadge{background:#FAEEDA;color:#854F0B}
+.d-none .dbadge{background:#F1EFE8;color:#5F5E5A}
+@media(prefers-color-scheme:dark){
+  .d-strong .dbadge{background:#04342C;color:#9FE1CB}
+  .d-partial .dbadge,.d-starting .dbadge,.d-next .dbadge{background:#412402;color:#FAC775}
+  .d-none .dbadge{background:#2C2C2A;color:#B4B2A9}
+}
+.chev{font-size:10px;color:var(--color-text-tertiary);transition:transform .15s;flex-shrink:0}
+.db{display:none;padding:10px 12px 14px;border-top:0.5px solid var(--color-border-tertiary)}
+.db.open{display:block}
+.tgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tier{border-radius:var(--border-radius-md);padding:10px 10px 8px;border:0.5px solid}
+.tier-g{border-color:#EF9F27;background:#FAEEDA}
+.tier-h{border-color:#5DCAA5;background:#E1F5EE}
+.tier-i{border-color:#AFA9EC;background:#EEEDFE}
+@media(prefers-color-scheme:dark){
+  .tier-g{border-color:#BA7517;background:#412402}
+  .tier-h{border-color:#1D9E75;background:#04342C}
+  .tier-i{border-color:#534AB7;background:#26215C}
+}
+.tier-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.tier-g .tier-label{color:#854F0B}
+.tier-h .tier-label{color:#085041}
+.tier-i .tier-label{color:#3C3489}
+@media(prefers-color-scheme:dark){
+  .tier-g .tier-label{color:#FAC775}
+  .tier-h .tier-label{color:#9FE1CB}
+  .tier-i .tier-label{color:#CECBF6}
+}
+.book{margin-bottom:9px;padding-bottom:9px;border-bottom:0.5px solid rgba(128,128,128,.15)}
+.book:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.btitle{font-size:12px;font-weight:500;line-height:1.3;display:block}
+.tier-g .btitle{color:#412402}.tier-h .btitle{color:#04342C}.tier-i .btitle{color:#26215C}
+@media(prefers-color-scheme:dark){
+  .tier-g .btitle{color:#FAC775}.tier-h .btitle{color:#9FE1CB}.tier-i .btitle{color:#CECBF6}
+}
+.bauth{font-size:11px;display:block;margin-top:1px}
+.tier-g .bauth{color:#854F0B}.tier-h .bauth{color:#0F6E56}.tier-i .bauth{color:#534AB7}
+@media(prefers-color-scheme:dark){
+  .tier-g .bauth{color:#EF9F27}.tier-h .bauth{color:#5DCAA5}.tier-i .bauth{color:#AFA9EC}
+}
+.bfree{font-size:9px;font-weight:500;padding:1px 5px;border-radius:6px;display:inline-block;margin-left:4px;vertical-align:middle}
+.tier-g .bfree{background:#EF9F27;color:#412402}
+.tier-h .bfree{background:#1D9E75;color:#04342C}
+.tier-i .bfree{background:#7F77DD;color:#26215C}
+@media(prefers-color-scheme:dark){
+  .tier-g .bfree{background:#633806;color:#FAC775}
+  .tier-h .bfree{background:#085041;color:#9FE1CB}
+  .tier-i .bfree{background:#3C3489;color:#CECBF6}
+}
+.bdesc{font-size:11px;margin-top:3px;line-height:1.45}
+.tier-g .bdesc{color:#633806}.tier-h .bdesc{color:#0F6E56}.tier-i .bdesc{color:#534AB7}
+@media(prefers-color-scheme:dark){
+  .tier-g .bdesc{color:#EF9F27;opacity:.85}.tier-h .bdesc{color:#5DCAA5;opacity:.85}.tier-i .bdesc{color:#AFA9EC;opacity:.85}
+}
+</style>
+
+<div class="wrap">
+<div class="tier-legend">
+  <div class="tl"><div class="tldot" style="background:#EF9F27"></div>Gold standard — the authoritative reference</div>
+  <div class="tl"><div class="tldot" style="background:#1D9E75"></div>Hands-on — build things while you learn</div>
+  <div class="tl"><div class="tldot" style="background:#7F77DD"></div>101 — get oriented first, no friction</div>
+</div>
+
+<div class="dom d-partial" id="r1">
+  <div class="dh" onclick="tog(1)">
+    <div class="dn">01</div>
+    <div class="dname">Mathematical foundations</div>
+    <div class="dbadge">Partial</div>
+    <div class="chev" id="rc1">▼</div>
+  </div>
+  <div class="db" id="rb1">
+    <div class="tgrid">
+      <div class="tier tier-g">
+        <div class="tier-label">Gold standard</div>
+        <div class="book">
+          <span class="btitle">Mathematics for Machine Learning<span class="bfree">free</span></span>
+          <span class="bauth">Deisenroth, Faisal, Ong · 2020</span>
+          <div class="bdesc">Purpose-built bridge from ML to deeper math. Linear algebra, probability, and optimisation in unified notation. Free PDF at mml-book.github.io</div>
+        </div>
+        <div class="book">
+          <span class="btitle">Introduction to Linear Algebra</span>
+          <span class="bauth">Gilbert Strang · 5th ed</span>
+          <div class="bdesc">The MIT standard. If you want eigenvalue intuition and matrix decompositions from first principles, this is the one.</div>
+        </div>
+      </div>
+      <div class="tier tier-h">
+        <div class="tier-label">Hands-on</div>
+        <div class="book">
+          <span class="btitle">Kalman and Bayesian Filters in Python<span class="bfree">free</span></span>
+          <span class="bauth">Roger Labbe · GitHub</span>
+          <div class="bdesc">Introduces the math by making you implement filters. Best way to make the Gaussian conditioning concrete. Every formula has a notebook cell.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">Mathematics for ML Specialisation<span class="bfree">free audit</span></span>
+          <span class="bauth">Imperial College · Coursera</span>
+          <div class="bdesc">Worked problems with graded exercises. Covers the three specific tools: linear algebra, multivariate calculus, PCA.</div>
+        </div>
+      </div>
+      <div class="tier tier-i">
+        <div class="tier-label">101</div>
+        <div class="book">
+          <span class="btitle">Essence of Linear Algebra<span class="bfree">free</span></span>
+          <span class="bauth">3Blue1Brown · YouTube</span>
+          <div class="bdesc">Visual geometric intuition for every operation. Watch this before reading any textbook. 15 videos, ~3 hours total.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">No Bullshit Guide to Linear Algebra</span>
+          <span class="bauth">Ivan Savov · 2nd ed</span>
+          <div class="bdesc">Densely direct. No motivation, no padding, just the tools. Good if you want a quick reference map before going deep.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dom d-next" id="r2">
+  <div class="dh" onclick="tog(2)">
+    <div class="dn">02</div>
+    <div class="dname">Probabilistic estimation</div>
+    <div class="dbadge">Priority next</div>
+    <div class="chev" id="rc2">▼</div>
+  </div>
+  <div class="db" id="rb2">
+    <div class="tgrid">
+      <div class="tier tier-g">
+        <div class="tier-label">Gold standard</div>
+        <div class="book">
+          <span class="btitle">Probabilistic Robotics</span>
+          <span class="bauth">Thrun, Burgard, Fox · MIT Press 2005</span>
+          <div class="bdesc">THE book. Every autonomy engineer has read Ch.1–5. KF, EKF, particle filters, SLAM — all derived rigorously. Slightly dated on SLAM but foundational on estimation.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">State Estimation for Robotics<span class="bfree">free</span></span>
+          <span class="bauth">Tim Barfoot · Cambridge 2017</span>
+          <div class="bdesc">The modern rigorous reference. Uses Lie groups (SO(3), SE(3)) for 3D estimation. Graduate level but the appendices alone are worth it. Free PDF from author.</div>
+        </div>
+      </div>
+      <div class="tier tier-h">
+        <div class="tier-label">Hands-on</div>
+        <div class="book">
+          <span class="btitle">Kalman and Bayesian Filters in Python<span class="bfree">free</span></span>
+          <span class="bauth">Roger Labbe · github.com/rlabbe</span>
+          <div class="bdesc">14 Jupyter notebooks. Build every filter from scratch. The single best hands-on resource in this domain. Start here before any textbook.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">filterpy<span class="bfree">free</span></span>
+          <span class="bauth">Roger Labbe · Python library</span>
+          <div class="bdesc">Reference implementation. Read the source — it's cleaner than most textbook pseudocode. Useful when your Rust implementation diverges unexpectedly.</div>
+        </div>
+      </div>
+      <div class="tier tier-i">
+        <div class="tier-label">101</div>
+        <div class="book">
+          <span class="btitle">Understanding the Kalman Filter<span class="bfree">free</span></span>
+          <span class="bauth">Faragher · IEEE Signal Proc. 2012</span>
+          <div class="bdesc">8-page paper. Best single document for getting the intuition. Read this first — it will make Thrun Ch.3 take 1 hour instead of 4.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">Special Topics: The Kalman Filter<span class="bfree">free</span></span>
+          <span class="bauth">Michel van Biezen · YouTube</span>
+          <div class="bdesc">55 short videos (5–8 min each). Extremely accessible, works through scalar examples before matrix form. Good for building mechanical fluency.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dom d-strong" id="r3">
+  <div class="dh" onclick="tog(3)">
+    <div class="dn">03</div>
+    <div class="dname">Perception &amp; signal processing</div>
+    <div class="dbadge">Strong</div>
+    <div class="chev" id="rc3">▼</div>
+  </div>
+  <div class="db" id="rb3">
+    <div class="tgrid">
+      <div class="tier tier-g">
+        <div class="tier-label">Gold standard</div>
+        <div class="book">
+          <span class="btitle">Multiple View Geometry in Computer Vision</span>
+          <span class="bauth">Hartley &amp; Zisserman · Cambridge 2004</span>
+          <div class="bdesc">The geometric CV bible. Projective geometry, camera models, epipolar geometry, reconstruction. Required reading before visual odometry or SLAM.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">Introduction to Radar Systems</span>
+          <span class="bauth">Skolnik · 3rd ed, McGraw-Hill</span>
+          <div class="bdesc">The standard radar reference. Range, Doppler, antenna patterns, clutter, CFAR. Your gap area. Ch.1–3 is enough to read Anduril's radar product literature fluently.</div>
+        </div>
+      </div>
+      <div class="tier tier-h">
+        <div class="tier-label">Hands-on</div>
+        <div class="book">
+          <span class="btitle">Think DSP<span class="bfree">free</span></span>
+          <span class="bauth">Allen Downey · Green Tea Press</span>
+          <div class="bdesc">Build every DSP concept in Python. FFT, filtering, spectrograms, convolution. Free PDF. Good for filling signal processing gaps alongside your existing CV knowledge.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">Programming Computer Vision with Python<span class="bfree">free</span></span>
+          <span class="bauth">Jan Erik Solem · free PDF</span>
+          <div class="bdesc">Practical implementation focus. Feature detection, optical flow, 3D reconstruction. Bridges theory to OpenCV-level code.</div>
+        </div>
+      </div>
+      <div class="tier tier-i">
+        <div class="tier-label">101</div>
+        <div class="book">
+          <span class="btitle">Computer Vision: Algorithms and Applications<span class="bfree">free</span></span>
+          <span class="bauth">Szeliski · 2nd ed, free at szeliski.org</span>
+          <div class="bdesc">The accessible modern reference. Covers everything from image formation to deep learning. Good for finding the topic you need then going to the dedicated textbook.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">But what is the Fourier Transform?<span class="bfree">free</span></span>
+          <span class="bauth">3Blue1Brown · YouTube</span>
+          <div class="bdesc">Visual intuition for frequency domain in 20 minutes. If your FFT intuition is shaky, watch this before any DSP textbook. Everything else builds on this visual.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dom d-starting" id="r4">
+  <div class="dh" onclick="tog(4)">
+    <div class="dn">04</div>
+    <div class="dname">Real-time systems</div>
+    <div class="dbadge">Starting</div>
+    <div class="chev" id="rc4">▼</div>
+  </div>
+  <div class="db" id="rb4">
+    <div class="tgrid">
+      <div class="tier tier-g">
+        <div class="tier-label">Gold standard</div>
+        <div class="book">
+          <span class="btitle">Hard Real-Time Computing Systems</span>
+          <span class="bauth">Giorgio Buttazzo · 3rd ed, Springer</span>
+          <div class="bdesc">Comprehensive real-time theory. Task scheduling, priority inversion, deadline guarantees, resource access protocols. The graduate-level reference for anything with hard timing constraints.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">Real-Time Systems</span>
+          <span class="bauth">Jane Liu · Prentice Hall 2000</span>
+          <div class="bdesc">The classic academic reference. Rate monotonic scheduling, EDF, schedulability analysis. Slightly dated on implementation but the theory is foundational and unchanged.</div>
+        </div>
+      </div>
+      <div class="tier tier-h">
+        <div class="tier-label">Hands-on</div>
+        <div class="book">
+          <span class="btitle">The Rust Embedded Book<span class="bfree">free</span></span>
+          <span class="bauth">Rust Embedded WG · docs.rust-embedded.org</span>
+          <div class="bdesc">Official guide to Rust on embedded/RTOS targets. no_std, memory-mapped registers, interrupt handlers, HAL abstraction. Start here for the Rust real-time path.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">Embedded Rust in Action</span>
+          <span class="bauth">Carl Löndahl McNamara · Manning 2023</span>
+          <div class="bdesc">Project-based. Build actual embedded systems in Rust. More practical than the embedded book, less comprehensive. Good complement.</div>
+        </div>
+      </div>
+      <div class="tier tier-i">
+        <div class="tier-label">101</div>
+        <div class="book">
+          <span class="btitle">Introduction to Embedded Systems<span class="bfree">free</span></span>
+          <span class="bauth">Lee &amp; Seshia · 2nd ed, leeseshia.org</span>
+          <div class="bdesc">The conceptual foundation. Models of computation, timing semantics, concurrency, state machines. Excellent for understanding why real-time systems are structured the way they are.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">FreeRTOS Getting Started<span class="bfree">free</span></span>
+          <span class="bauth">Amazon · freertos.org/Documentation</span>
+          <div class="bdesc">Even if you use Rust not C, understanding FreeRTOS tasks, queues, and semaphores gives you the mental model. 30-minute read, permanent vocabulary.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dom d-none" id="r5">
+  <div class="dh" onclick="tog(5)">
+    <div class="dn">05</div>
+    <div class="dname">Control theory</div>
+    <div class="dbadge">Not started</div>
+    <div class="chev" id="rc5">▼</div>
+  </div>
+  <div class="db" id="rb5">
+    <div class="tgrid">
+      <div class="tier tier-g">
+        <div class="tier-label">Gold standard</div>
+        <div class="book">
+          <span class="btitle">Feedback Systems<span class="bfree">free</span></span>
+          <span class="bauth">Åström &amp; Murray · caltech.edu/~murray/amwiki</span>
+          <div class="bdesc">The modern definitive reference. Used at Caltech, MIT, Stanford. Covers classical and modern control in unified framework. Free PDF. This is the one to own.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">Data-Driven Science and Engineering<span class="bfree">free</span></span>
+          <span class="bauth">Brunton &amp; Kutz · databookuw.com</span>
+          <div class="bdesc">Explicitly bridges control theory to ML/data-driven methods. DMD, SINDy, Koopman operators. Written for someone with your background. Free PDF.</div>
+        </div>
+      </div>
+      <div class="tier tier-h">
+        <div class="tier-label">Hands-on</div>
+        <div class="book">
+          <span class="btitle">Control Bootcamp<span class="bfree">free</span></span>
+          <span class="bauth">Steve Brunton · YouTube</span>
+          <div class="bdesc">30 short videos from PID through LQR, Kalman, and MPC. Code in MATLAB/Python alongside. Best systematic hands-on intro. Watch before opening any textbook.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">Brian Douglas — Control Systems<span class="bfree">free</span></span>
+          <span class="bauth">Brian Douglas · YouTube</span>
+          <div class="bdesc">~100 videos covering every control concept with excellent animations. The Khan Academy of control theory. Especially good for Bode plots, stability margins, PID tuning intuition.</div>
+        </div>
+      </div>
+      <div class="tier tier-i">
+        <div class="tier-label">101</div>
+        <div class="book">
+          <span class="btitle">Modern Control Engineering</span>
+          <span class="bauth">Katsuhiko Ogata · 5th ed</span>
+          <div class="bdesc">The standard undergraduate textbook. Every control course uses this. Dense but complete. Good reference once you have the intuition from Brunton's videos.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">MATLAB Tech Talks: Control Systems<span class="bfree">free</span></span>
+          <span class="bauth">MathWorks · YouTube</span>
+          <div class="bdesc">Short animated explainers for PID, transfer functions, frequency domain, state-space. Very accessible. Perfect if you want the concept in 5 minutes before going deep.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dom d-none" id="r6">
+  <div class="dh" onclick="tog(6)">
+    <div class="dn">06</div>
+    <div class="dname">Planning &amp; decision</div>
+    <div class="dbadge">Not started</div>
+    <div class="chev" id="rc6">▼</div>
+  </div>
+  <div class="db" id="rb6">
+    <div class="tgrid">
+      <div class="tier tier-g">
+        <div class="tier-label">Gold standard</div>
+        <div class="book">
+          <span class="btitle">Planning Algorithms<span class="bfree">free</span></span>
+          <span class="bauth">LaValle · planning.cs.uiuc.edu</span>
+          <div class="bdesc">The comprehensive reference. Covers discrete search through sampling-based planning through trajectory optimisation. Free full PDF. Exhaustive but well-structured — use it as a reference not a cover-to-cover read.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">Behavior Trees in Robotics and AI<span class="bfree">free</span></span>
+          <span class="bauth">Colledanchise &amp; Ögren · free from authors</span>
+          <div class="bdesc">The only dedicated BT textbook. Formal analysis, design patterns, relation to FSMs and STRIPS planning. Essential if you're building a BT executor in Rust.</div>
+        </div>
+      </div>
+      <div class="tier tier-h">
+        <div class="tier-label">Hands-on</div>
+        <div class="book">
+          <span class="btitle">Underactuated Robotics<span class="bfree">free</span></span>
+          <span class="bauth">Russ Tedrake · MIT OCW + Drake</span>
+          <div class="bdesc">Lecture notes + code using the Drake framework. Trajectory optimisation, LQR trees, MPC. Probably the best graduate-level planning course available free. Connects planning directly to control.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">OMPL Tutorials<span class="bfree">free</span></span>
+          <span class="bauth">ompl.kavrakilab.org</span>
+          <div class="bdesc">The Open Motion Planning Library. RRT, PRM, and 20+ other algorithms with a unified interface. Working through the tutorials gives you hands-on coverage of the major planning families.</div>
+        </div>
+      </div>
+      <div class="tier tier-i">
+        <div class="tier-label">101</div>
+        <div class="book">
+          <span class="btitle">AI for Robotics<span class="bfree">free</span></span>
+          <span class="bauth">Sebastian Thrun · Udacity</span>
+          <div class="bdesc">Accessible intro to localisation, search, PID, SLAM. Not deep but gives a good mental map before going into LaValle. Thrun is one of the best explainers in the field.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">AI: A Modern Approach — Ch. 3–4<span class="bfree">free excerpts</span></span>
+          <span class="bauth">Russell &amp; Norvig · 4th ed</span>
+          <div class="bdesc">Search algorithms chapter: BFS, DFS, A*, heuristics. If you haven't done formal algorithms, read this before LaValle. Russell's explanations are exceptionally clear.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dom d-partial" id="r7">
+  <div class="dh" onclick="tog(7)">
+    <div class="dn">07</div>
+    <div class="dname">Mission &amp; autonomy</div>
+    <div class="dbadge">Adjacent</div>
+    <div class="chev" id="rc7">▼</div>
+  </div>
+  <div class="db" id="rb7">
+    <div class="tgrid">
+      <div class="tier tier-g">
+        <div class="tier-label">Gold standard</div>
+        <div class="book">
+          <span class="btitle">Multiagent Systems<span class="bfree">free</span></span>
+          <span class="bauth">Shoham &amp; Leyton-Brown · masfoundations.org</span>
+          <div class="bdesc">The comprehensive multi-agent reference. Game theory, mechanism design, distributed constraint optimisation, auctions. Free PDF. The foundation for multi-vehicle task allocation.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">Introduction to Autonomous Mobile Robots</span>
+          <span class="bauth">Siegwart, Nourbakhsh, Scaramuzza · MIT Press 2nd ed</span>
+          <div class="bdesc">The autonomous systems textbook. Localisation, mapping, navigation, architecture. Ties all the stack layers together in one physical system context. The survey book for the domain.</div>
+        </div>
+      </div>
+      <div class="tier tier-h">
+        <div class="tier-label">Hands-on</div>
+        <div class="book">
+          <span class="btitle">ROS2 + Nav2 Stack<span class="bfree">free</span></span>
+          <span class="bauth">Open Source · docs.ros.org</span>
+          <div class="bdesc">Even for defence work, ROS2 is the best pedagogical environment to see all stack layers working together: DDS transport, behaviour trees, EKF localisation, A* planning, PID control. Install it and run Nav2 on a simulated robot — you'll see your whole landscape in one running system.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">Programming Robots with ROS</span>
+          <span class="bauth">Quigley, Gerkey, Smart · O'Reilly 2015</span>
+          <div class="bdesc">Practical ROS guide with worked projects. Dated on ROS2 specifics but the architectural concepts are timeless. Good companion to the official docs.</div>
+        </div>
+      </div>
+      <div class="tier tier-i">
+        <div class="tier-label">101</div>
+        <div class="book">
+          <span class="btitle">Anduril Lattice talks<span class="bfree">free</span></span>
+          <span class="bauth">Anduril Industries · YouTube</span>
+          <div class="bdesc">Search "Anduril Lattice architecture" on YouTube. Several public talks by their engineering leadership. Rare real-world glimpse into how a production mission system is actually designed. Watch this early to understand what you're building toward.</div>
+        </div>
+        <div class="book">
+          <span class="btitle">MIT 6.832 Underactuated Robotics<span class="bfree">free</span></span>
+          <span class="bauth">Russ Tedrake · MIT OCW</span>
+          <div class="bdesc">The full course bridges planning + control + dynamics + autonomy. The lecture on trajectory stabilisation connects everything. Best single course for seeing the full stack integrated.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+function tog(n){
+  var b=document.getElementById('rb'+n);
+  var c=document.getElementById('rc'+n);
+  b.classList.toggle('open');
+  c.style.transform=b.classList.contains('open')?'rotate(180deg)':'';
+}
+</script>

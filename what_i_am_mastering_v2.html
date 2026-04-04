@@ -1,0 +1,128 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.doc{padding:1.5rem 0 2.5rem}
+.dh{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:0.5px solid var(--color-border-tertiary)}
+h1{font-size:22px;font-weight:500;line-height:1.35;margin-bottom:.4rem;color:var(--color-text-primary)}
+.sub{font-size:14px;color:var(--color-text-secondary);margin-bottom:.2rem}
+.dt{font-size:11px;color:var(--color-text-tertiary)}
+h2{font-size:16px;font-weight:500;color:var(--color-text-primary);margin:2rem 0 .6rem}
+p{font-size:14px;line-height:1.9;color:var(--color-text-secondary);margin-bottom:.9rem}
+p:last-child{margin-bottom:0}
+.em{color:#1D9E75}
+@media(prefers-color-scheme:dark){.em{color:#5DCAA5}}
+.em-blue{color:#185FA5}
+@media(prefers-color-scheme:dark){.em-blue{color:#85B7EB}}
+.pull{border-left:3px solid #1D9E75;padding:.6rem 1rem;margin:1.5rem 0;border-radius:0}
+.pull p{font-size:15px;font-style:italic;color:var(--color-text-primary);line-height:1.7}
+.pull-blue{border-left:3px solid #378ADD;padding:.6rem 1rem;margin:1.5rem 0;border-radius:0}
+.pull-blue p{font-size:15px;font-style:italic;color:var(--color-text-primary);line-height:1.7}
+hr{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:1.75rem 0}
+.sw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin:1rem 0}
+.sw-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;border-left:3px solid #378ADD}
+.sw-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.sw-body{font-size:12px;line-height:1.65;color:var(--color-text-secondary)}
+.sw-proj{font-size:11px;color:#185FA5;margin-top:5px;font-family:var(--font-mono,monospace)}
+@media(prefers-color-scheme:dark){.sw-proj{color:#85B7EB}}
+.closing{border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:1rem 1.25rem;margin-top:2rem}
+.closing h2{margin-top:0;margin-bottom:.6rem}
+</style>
+
+<div class="doc">
+
+<div class="dh">
+  <h1>What I'm mastering</h1>
+  <p class="sub">A note for when I feel lost from the macro view</p>
+  <p class="dt">Shekhar · April 2026</p>
+</div>
+
+<h2>The discipline</h2>
+<p>The thing I'm mastering has a precise name, even if nobody uses it consistently: <span class="em">probabilistic state estimation</span>. It is the science of inferring hidden truth from observable noise. The formal discipline of knowing things you cannot directly measure, from evidence that is always imperfect.</p>
+<p>This is not a narrow specialty. It is the substrate on which almost every serious physical system in the modern world runs. The GPS in my phone fuses twelve noisy satellite signals through a Kalman filter into a coherent position estimate. Every commercial aircraft maintains its sense of position and attitude through an EKF loop at 200Hz, without touching the ground. A military perimeter tower converts a cloud of radar returns into tracked objects with positions, velocities, and threat assessments — all via a state estimator. A nuclear reactor's control rods are positioned based on a real-time estimate of the core's internal state, computed from sensors that cannot see inside the reactor.</p>
+<div class="pull"><p>In every case, the same question: given what I can measure, what is the most probable state of the world right now — and how confident am I?</p></div>
+<p>The reason it feels hard to name is that it appears across domains wearing different labels. In aerospace it's GNC. In robotics it's SLAM and state estimation. In manufacturing it's predictive maintenance. In defence it's sensor fusion and multi-target tracking. These are not different disciplines. They are the same mathematical skeleton wearing different domain clothes.</p>
+
+<hr>
+
+<h2>What I'm not learning</h2>
+<p>I'm not learning a tool. I'm not primarily learning Rust, though I'm learning Rust. I'm not primarily learning the Kalman filter, though I'm learning the Kalman filter. I'm learning a way of thinking about physical systems that will remain useful regardless of what the dominant framework looks like in ten years.</p>
+<p>The way of thinking: every physical system has a hidden state that evolves over time according to some dynamics. You observe that state indirectly through sensors that lie to varying degrees. Your job is to maintain the best possible estimate of that hidden state, quantify your uncertainty honestly, and use that estimate to make good decisions. Everything else is implementation detail.</p>
+
+<hr>
+
+<h2>The three layers I'm building</h2>
+<p>More precisely, I'm assembling a three-layer capability that very few people carry in one mind.</p>
+<p>The <span class="em">first layer is the estimation substrate</span> — Kalman filters, EKFs, particle filters, factor graphs. The most transferable layer. The EKF I implement for battery SOH degradation and the EKF inside a UAV navigation computer are the same algorithm. The physics function f(x) changes. The filter does not.</p>
+<p>The <span class="em">second layer is the real-time execution environment</span> — making these algorithms run in systems where correctness under time constraints is not optional. Rust, no_std, lock-free data structures, deterministic memory, DDS pub/sub. Most people who understand the estimation math cannot build this layer. Most people who can build this layer don't understand the math.</p>
+<p>The <span class="em">third layer is the intelligent orchestration layer</span> — AI agents, learned models, LLM-native interfaces. Where analytical frameworks are well-understood, use them. Where dynamics are too complex to model analytically, where the interface must be natural language — deploy learned systems. The battery intelligence platform at Peak Energy is this layer applied to manufacturing. Anduril's Lattice does the same for mission coordination.</p>
+<div class="pull"><p>The person who works fluently across estimation math, real-time systems, and intelligent orchestration is genuinely rare. That is what I'm building toward.</p></div>
+
+<hr>
+
+<h2>The software engineering is the engineering</h2>
+<p>There's a version of this path where estimation math and software engineering are treated as separate concerns — you learn the math, you learn to code, somehow they come together later. That's the wrong model. The software engineering <em>is</em> how the estimation math becomes real. There are five specific disciplines that show up in every project, each directly motivated by the estimation requirements.</p>
+
+<div class="sw-grid">
+  <div class="sw-card">
+    <div class="sw-title">Allocation discipline on the hot path</div>
+    <div class="sw-body">When the EKF predict step runs every millisecond, <code>Vec::push</code> is a liability — a hidden realloc that can take 10ms on a bad day. Every matrix must be pre-allocated at construction, reused on every tick. Zero heap allocation between sensor arrival and state update.</div>
+    <div class="sw-proj">→ Projects 3, 4</div>
+  </div>
+  <div class="sw-card">
+    <div class="sw-title">Concurrency without locks</div>
+    <div class="sw-body">The filter is fed by multiple sensor threads: IMU at 200Hz, GPS at 1Hz. If they share a mutex, the GPS thread can block the IMU thread mid-prediction — the 200Hz loop misses its deadline. Lock-free ring buffers let sensor threads write and the EKF thread read, with neither ever blocking the other.</div>
+    <div class="sw-proj">→ Project 7, then Project 19</div>
+  </div>
+  <div class="sw-card">
+    <div class="sw-title">Deterministic execution</div>
+    <div class="sw-body">Real-time means every code path completes in bounded worst-case time — not average time. No dynamic dispatch that could flush the instruction cache. No allocator that could block. <code>no_std</code> Rust forces you to confront this. Application code optimises average latency. Real-time code optimises worst-case latency.</div>
+    <div class="sw-proj">→ Project 8, Project 22</div>
+  </div>
+  <div class="sw-card">
+    <div class="sw-title">Numerical precision as correctness</div>
+    <div class="sw-body">The covariance matrix P must stay positive definite. Floating-point rounding can destroy this, causing the Kalman gain to produce nonsense and the filter to diverge. Joseph form covariance update instead of standard form. Cholesky decomposition for matrix inversion instead of LU. These aren't optimisations — they're correctness requirements.</div>
+    <div class="sw-proj">→ Projects 4, 5</div>
+  </div>
+  <div class="sw-card">
+    <div class="sw-title">Type safety for physical quantities</div>
+    <div class="sw-body">Velocity in m/s and velocity in m/ms are different things. State in the body frame and state in the inertial frame are different things. Rust's type system lets you encode these as distinct types and catch unit or frame errors at compile time — before the drone crashes, not after. The type system enforces physics correctness.</div>
+    <div class="sw-proj">→ Project 22 (API design)</div>
+  </div>
+  <div class="sw-card">
+    <div class="sw-title">Trait abstraction for the physics boundary</div>
+    <div class="sw-body">The process model f(x) and observation model h(x) should be Rust traits — <code>ProcessModel</code>, <code>ObservationModel</code> — not hardcoded functions inside the filter. This makes the estimation core domain-agnostic. Swap the battery degradation model for a ballistic trajectory model. The filter is unchanged.</div>
+    <div class="sw-proj">→ Project 22 (the autonomy primitives library)</div>
+  </div>
+</div>
+
+<div class="pull-blue"><p>The projects aren't sequenced by domain difficulty. They're sequenced by which software discipline they introduce. Project 7 (lock-free ring buffer) and Project 4 (EKF with numerical stability) are more connected than they look — one is the mathematics of estimation, the other is the engineering that makes it run without corrupting itself.</p></div>
+
+<hr>
+
+<h2>My specific angle</h2>
+<p>Most people trying to enter this field arrive from one of two directions. The first is the academic direction: deep mathematical fluency, limited production experience. They can derive the observability matrix. They have never shipped software running continuously on a factory floor. The second is the software direction: excellent systems engineers, no formation in estimation theory — reaching for ML as the default tool for any uncertainty problem.</p>
+<p>I'm entering from a third direction: deep manufacturing operational experience, production ML systems already shipped, now learning the formal estimation substrate my intuition has been trying to reach. The factories, the battery cycling data, the SCADA pipelines — these aren't credentials to put aside. They're the domain context that makes me dangerous. An autonomy engineer who grew up in GNC textbooks has never understood what it means when a cell shows an anomalous voltage curve at cycle 47. I have.</p>
+<p><span class="em">My domain isn't batteries. It isn't manufacturing. My domain is physical systems operating in the presence of noise, uncertainty, and imperfect sensors.</span> I encountered it through battery manufacturing first. I'll encounter it again through many other lenses.</p>
+
+<hr>
+
+<h2>What the work actually looks like</h2>
+<p>A domain expert hands me their equations. They tell me what they care about knowing (the hidden state), what they can measure (the observations), and what they know about how the system evolves (the process model). I take that, translate it into a state-space representation, check the observability, tune Q from empirical residuals and R from calibration data, implement the EKF, build the real-time software that runs it without allocating on the hot path, with lock-free sensor feeds, with numerically stable matrix operations — and connect it to the AI layer that makes it interpretable to humans.</p>
+<p>The domain expert contributes the physics. I contribute the framework that makes the physics computable in real time, without corrupting itself, with honest uncertainty.</p>
+
+<hr>
+
+<h2>The long view</h2>
+<p>Five years from now, I'll be able to walk into almost any industry that operates physical systems — defence, space, nuclear, power grids, autonomous vehicles, manufacturing intelligence — and immediately understand the core estimation problem. I'll know which states are observable before anyone runs the filter. I'll know which software architecture the multi-rate sensor fusion requires before anyone writes a line of code. I'll be the person who connects the physicist's equations to the running system.</p>
+<p>The Kalman filter was first published in 1960. It runs right now on the International Space Station, in every commercial airliner, in every GPS receiver, and in every serious autonomous system on earth. The mathematical core is unchanged. The implementations have gotten faster. The people who understand both the math and the software discipline that makes it run correctly are still scarce.</p>
+
+<hr>
+
+<div class="closing">
+<h2>When I feel lost</h2>
+<p>When the Rust borrow checker is fighting me, the Jacobian is wrong, the covariance matrix has gone non-positive-definite, and it's not clear why any of this matters — remember: every physical system that operates beyond human reaction time runs on some version of what I'm building. The math is 65 years old and still unsurpassed. I'm not learning an academic curiosity. I'm learning the substrate.</p>
+<p>The path is estimation → control → planning → real-time → integration. One project at a time. The battery SOH EKF comes first not because batteries are the destination, but because I know that domain well enough to notice immediately when both the math and the software are wrong — and to know which one broke.</p>
+<p style="color:var(--color-text-primary);font-weight:500">Keep going. The substrate is worth building.</p>
+</div>
+
+</div>
