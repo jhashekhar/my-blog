@@ -13,14 +13,13 @@ export default function Home() {
 				/>
 
 				<p className="text-[14px] text-gray-700 mb-6 leading-relaxed">
-					I work at{' '}
+					I write software at{' '}
 					<a
 						href="https://peakenergy.com"
 						className="font-medium hover:text-orange-600"
 					>
 						Peak Energy
 					</a>{' '}
-					where I build software for manufacturing.
 				</p>
 
 				<div className="flex items-center gap-4 text-sm">
@@ -29,12 +28,6 @@ export default function Home() {
 						className="text-gray-700 hover:text-gray-500 underline underline-offset-2"
 					>
 						Github
-					</a>
-					<a
-						href="https://in.linkedin.com/in/jshekhar"
-						className="text-gray-700 hover:text-gray-500 underline underline-offset-2"
-					>
-						LinkedIn
 					</a>
 					<a
 						href="mailto:sj@shekharjha.com"

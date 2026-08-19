@@ -4,12 +4,12 @@ import { IBM_Plex_Sans } from 'next/font/google';
 
 const ibmPlex = IBM_Plex_Sans({
 	weight: ['400', '500', '600'],
-	subsets: ['latin']
+	subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
 	title: 'Shekhar Jha',
-	description: 'Software Engineer at Peak Energy',
+	description: 'Engineer',
 };
 
 export default function RootLayout({
